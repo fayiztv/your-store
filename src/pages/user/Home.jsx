@@ -14,7 +14,6 @@ import {
 } from "../../utils/constents";
 import { SectionHeading } from "../../components/common/sectionHeading";
 
-const categoryIcons = [Shirt, Tag];
 
 export default function Home() {
   const navigate = useNavigate();
@@ -191,7 +190,6 @@ export default function Home() {
               className="hide-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-6 md:gap-4 md:overflow-visible md:px-0"
             >
               {categories.map((cat, index) => {
-                const Icon = categoryIcons[index % categoryIcons.length];
                 const colorClass =
                   categoryColors[index % categoryColors.length];
                 return (
@@ -211,7 +209,7 @@ export default function Home() {
                     <div
                       className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl ${colorClass}`}
                     >
-                      <Icon className="h-6 w-6" />
+                      <Tag className="h-6 w-6" />
                     </div>
                     <p
                       className="mt-3 line-clamp-2 text-sm font-medium text-[var(--text-primary)]"
