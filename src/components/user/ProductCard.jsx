@@ -32,7 +32,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
         className="flex min-h-[110px] w-full cursor-pointer flex-row overflow-hidden rounded-2xl bg-[var(--card-bg)] shadow-sm"
       >
         {/* LEFT — image */}
-        <div className="relative w-28 shrink-0">
+        <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-l-3xl">
           {product.images?.[0] ? (
             <img
               src={product.images[0]}

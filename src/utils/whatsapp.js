@@ -1,6 +1,6 @@
 export function openWhatsApp(product, selectedSize, whatsappNumber) {
   const price = product.offerPrice ?? product.price;
-  const sizeLine = selectedSize ? `Size: ${selectedSize}` : "";
+  const sizeLine = selectedSize ? `${selectedSize}` : "";
 
   const message = `Hello *Thread Store*, I want to buy this product.
 

@@ -11,14 +11,9 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore';
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
 import toast from 'react-hot-toast';
-import { db, storage } from '../../firebase/firebase';
+import { db } from '../../firebase/firebase';
+import { uploadBannerToCloudinary } from '../../utils/cloudinary';
 
 export default function AdminSettings() {
   const fileInputRef = useRef(null);
@@ -37,6 +32,7 @@ export default function AdminSettings() {
   const [bannerFile, setBannerFile] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
   const [bannerSaving, setBannerSaving] = useState(false);
+  const [bannerUploadProgress, setBannerUploadProgress] = useState(0);
 
   useEffect(() => {
     async function fetchSettings() {
@@ -105,15 +101,16 @@ export default function AdminSettings() {
     }
 
     setBannerSaving(true);
+    setBannerUploadProgress(0);
+
     try {
-      const storagePath = `banners/${Date.now()}_${bannerFile.name}`;
-      const storageRef = ref(storage, storagePath);
-      await uploadBytesResumable(storageRef, bannerFile);
-      const imageUrl = await getDownloadURL(storageRef);
+      // Upload to Cloudinary
+      const imageUrl = await uploadBannerToCloudinary(bannerFile, (progress) => {
+        setBannerUploadProgress(progress);
+      });
 
       await addDoc(collection(db, 'banners'), {
         imageUrl,
-        storagePath,
         title: bannerTitle.trim(),
         subtitle: bannerSubtitle.trim(),
         ctaText: bannerCtaText.trim() || 'Shop Now',
@@ -129,6 +126,7 @@ export default function AdminSettings() {
       setBannerFile(null);
       if (bannerPreview) URL.revokeObjectURL(bannerPreview);
       setBannerPreview(null);
+      setBannerUploadProgress(0);
     } catch {
       toast.error('Failed to add banner');
     } finally {
@@ -138,15 +136,7 @@ export default function AdminSettings() {
 
   async function handleDeleteBanner(banner) {
     if (!window.confirm('Delete this banner?')) return;
-
     try {
-      if (banner.storagePath) {
-        try {
-          await deleteObject(ref(storage, banner.storagePath));
-        } catch {
-          // storage file may already be gone
-        }
-      }
       await deleteDoc(doc(db, 'banners', banner.id));
       toast.success('Banner deleted');
     } catch {
@@ -182,6 +172,7 @@ export default function AdminSettings() {
               type="text"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
+              style={{ fontSize: '16px' }}
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="Thread Store"
             />
@@ -194,6 +185,7 @@ export default function AdminSettings() {
               type="text"
               value={whatsappNumber}
               onChange={(e) => setWhatsappNumber(e.target.value)}
+              style={{ fontSize: '16px' }}
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="919876543210"
             />
@@ -209,6 +201,7 @@ export default function AdminSettings() {
               type="url"
               value={instagramUrl}
               onChange={(e) => setInstagramUrl(e.target.value)}
+              style={{ fontSize: '16px' }}
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="https://www.instagram.com/threadstore"
             />
@@ -303,6 +296,7 @@ export default function AdminSettings() {
             type="text"
             value={bannerTitle}
             onChange={(e) => setBannerTitle(e.target.value)}
+            style={{ fontSize: '16px' }}
             placeholder="Banner title"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           />
@@ -310,6 +304,7 @@ export default function AdminSettings() {
             type="text"
             value={bannerSubtitle}
             onChange={(e) => setBannerSubtitle(e.target.value)}
+            style={{ fontSize: '16px' }}
             placeholder="Banner subtitle"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           />
@@ -318,6 +313,7 @@ export default function AdminSettings() {
               type="text"
               value={bannerCtaText}
               onChange={(e) => setBannerCtaText(e.target.value)}
+              style={{ fontSize: '16px' }}
               placeholder="CTA button text (e.g. Shop Now)"
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             />
@@ -325,10 +321,25 @@ export default function AdminSettings() {
               type="text"
               value={bannerCtaLink}
               onChange={(e) => setBannerCtaLink(e.target.value)}
+              style={{ fontSize: '16px' }}
               placeholder="CTA link (e.g. /products)"
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             />
           </div>
+
+          {bannerSaving && bannerUploadProgress > 0 && (
+            <div>
+              <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                <div
+                  className="h-full rounded-full bg-primary transition-all duration-300"
+                  style={{ width: `${bannerUploadProgress}%` }}
+                />
+              </div>
+              <p className="mt-1 text-center text-xs text-gray-500">
+                Uploading... {Math.round(bannerUploadProgress)}%
+              </p>
+            </div>
+          )}
 
           <motion.button
             type="submit"
@@ -337,7 +348,7 @@ export default function AdminSettings() {
             whileTap={{ scale: 0.98 }}
             className="w-full rounded-xl bg-primary py-3 font-semibold text-white disabled:opacity-70"
           >
-            {bannerSaving ? 'Adding Banner...' : 'Add Banner'}
+            {bannerSaving ? 'Uploading...' : 'Add Banner'}
           </motion.button>
         </form>
       </motion.section>

@@ -10,9 +10,9 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import toast from "react-hot-toast";
-import { db, storage } from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
+import { uploadImageToCloudinary } from "../../utils/cloudinary";
 import useCategories from "../../hooks/useCategories";
 import { AdminProductFormToggle } from "../../components/admin/AdminProductFormToggle";
 
@@ -66,7 +66,7 @@ export default function AdminProductForm() {
             url,
             preview: url,
             file: null,
-          })),
+          }))
         );
       } catch {
         toast.error("Failed to load product");
@@ -144,27 +144,6 @@ export default function AdminProductForm() {
     });
   }
 
-  async function uploadImage(file) {
-    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
-
-    return new Promise((resolve, reject) => {
-      const task = uploadBytesResumable(storageRef, file);
-      task.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(progress);
-        },
-        reject,
-        async () => {
-          const url = await getDownloadURL(task.snapshot.ref);
-          resolve(url);
-        },
-      );
-    });
-  }
-
   async function handleSave(e) {
     e.preventDefault();
 
@@ -187,12 +166,22 @@ export default function AdminProductForm() {
 
     try {
       const imageUrls = [];
+      const newFiles = images.filter((img) => img.file);
+      // const existingUrls = images.filter((img) => img.url && !img.file);
 
+      // Add existing URLs first (keeping their order)
       for (const img of images) {
-        if (img.url) {
+        if (img.url && !img.file) {
           imageUrls.push(img.url);
         } else if (img.file) {
-          const url = await uploadImage(img.file);
+          // Upload new files to Cloudinary
+          const url = await uploadImageToCloudinary(img.file, (progress) => {
+            // Calculate overall progress across all new files
+            const fileIndex = newFiles.findIndex((f) => f.file === img.file);
+            const baseProgress = (fileIndex / newFiles.length) * 100;
+            const fileProgress = progress / newFiles.length;
+            setUploadProgress(baseProgress + fileProgress);
+          });
           imageUrls.push(url);
         }
       }
@@ -222,7 +211,8 @@ export default function AdminProductForm() {
       }
 
       navigate("/admin/products");
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to save product");
     } finally {
       setSaving(false);
@@ -283,6 +273,7 @@ export default function AdminProductForm() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
+            style={{ fontSize: '16px' }}
             className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             placeholder="e.g. Classic Oxford Shirt"
           />
@@ -296,6 +287,7 @@ export default function AdminProductForm() {
             rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            style={{ fontSize: '16px' }}
             className="w-full resize-y rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             placeholder="Describe the product..."
           />
@@ -313,6 +305,7 @@ export default function AdminProductForm() {
               step="0.01"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              style={{ fontSize: '16px' }}
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
           </div>
@@ -326,6 +319,7 @@ export default function AdminProductForm() {
               step="0.01"
               value={offerPrice}
               onChange={(e) => setOfferPrice(e.target.value)}
+              style={{ fontSize: '16px' }}
               placeholder="Leave empty for no discount"
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
@@ -340,6 +334,7 @@ export default function AdminProductForm() {
             required
             value={categoryId}
             onChange={handleCategoryChange}
+            style={{ fontSize: '16px' }}
             className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
             <option value="">Select a category</option>
@@ -397,6 +392,7 @@ export default function AdminProductForm() {
           onChange={(e) => setSizeInput(e.target.value.toUpperCase())}
           onKeyDown={handleSizeKeyDown}
           onBlur={handleSizeBlur}
+          style={{ fontSize: '16px' }}
           placeholder="e.g. S, M, L, XL or 28, 30, 32"
           className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
         />
@@ -417,7 +413,7 @@ export default function AdminProductForm() {
           <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
             Click to upload images
           </p>
-          <p className="mt-1 text-xs text-gray-400">Up to 4 images</p>
+          <p className="mt-1 text-xs text-gray-400">Up to 4 images • Stored on Cloudinary</p>
         </button>
 
         <input
@@ -456,12 +452,12 @@ export default function AdminProductForm() {
         <div className="mt-4">
           <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
             <div
-              className="h-full rounded-full bg-primary transition-all"
+              className="h-full rounded-full bg-primary transition-all duration-300"
               style={{ width: `${uploadProgress}%` }}
             />
           </div>
           <p className="mt-1 text-center text-xs text-gray-500">
-            Uploading... {Math.round(uploadProgress)}%
+            Uploading to Cloudinary... {Math.round(uploadProgress)}%
           </p>
         </div>
       )}
