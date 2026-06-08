@@ -5,7 +5,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
-import FullScreenSpinner from '../components/common/spinner';
+import FullScreenSpinner from '../components/common/Spinner';
 
 export const AuthContext = createContext(null);
 
