@@ -42,7 +42,7 @@ export default function Home() {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % banners.length);
-    }, 4000);
+    }, 10000);
     return () => clearInterval(timer);
   }, [hasBanners, banners.length]);
 
