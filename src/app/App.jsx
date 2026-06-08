@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "../contexts/AuthContext";
 import { FavouritesProvider } from "../contexts/FavouritesContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
-import AppRoutes from "./Routes";
+import AppRoutes from "./routes";
 
 export default function App() {
   return (
