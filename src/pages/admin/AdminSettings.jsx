@@ -95,10 +95,6 @@ export default function AdminSettings() {
       toast.error('Please select a banner image');
       return;
     }
-    if (!bannerTitle.trim()) {
-      toast.error('Banner title is required');
-      return;
-    }
 
     setBannerSaving(true);
     setBannerUploadProgress(0);
@@ -113,8 +109,8 @@ export default function AdminSettings() {
         imageUrl,
         title: bannerTitle.trim(),
         subtitle: bannerSubtitle.trim(),
-        ctaText: bannerCtaText.trim() || 'Shop Now',
-        ctaLink: bannerCtaLink.trim() || '/products',
+        ctaText: bannerCtaText.trim(),
+        ctaLink: bannerCtaLink.trim(),
         createdAt: serverTimestamp(),
       });
 
