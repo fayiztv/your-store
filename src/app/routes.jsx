@@ -36,6 +36,7 @@ export default function AppRoutes() {
           }
         >
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="products/new" element={<AdminProductForm />} />
           <Route path="products/:id" element={<AdminProductForm />} />
