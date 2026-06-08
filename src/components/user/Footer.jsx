@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import useSettings from "../../hooks/useSettings";
+import { Logo } from "../common/Logo";
 
 export default function Footer() {
   const { settings } = useSettings();
@@ -20,14 +21,7 @@ export default function Footer() {
       <div className="mx-auto max-w-5xl">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-white">
-                T
-              </span>
-              <span className="font-outfit text-xl font-bold text-[var(--text-primary)]">
-                Thread Store
-              </span>
-            </div>
+            <Logo/>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
               Premium gents clothing store
             </p>
