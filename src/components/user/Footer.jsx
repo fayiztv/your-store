@@ -21,7 +21,7 @@ export default function Footer() {
       <div className="mx-auto max-w-5xl">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <Logo/>
+            <Logo />
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
               Premium gents clothing store
             </p>
@@ -80,7 +80,7 @@ export default function Footer() {
           className="mt-8 border-t pt-6 text-center text-xs text-[var(--text-secondary)]"
           style={{ borderColor: "var(--border)" }}
         >
-          © 2025 Thread Store. All rights reserved.
+          © {new Date().getFullYear()} Thread Store. All rights reserved.
         </div>
       </div>
     </footer>
