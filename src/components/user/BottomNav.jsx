@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useFavourites } from "../../contexts/FavouritesContext";
 import { useTheme } from "../../contexts/ThemeContext";
-import useSettings from "../../hooks/useSettings";
+import { useStoreSettings } from "../../contexts/SettingsContext";
 
 const navItems = [
   { label: "Home", icon: Home, path: "/" },
@@ -24,12 +24,13 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const { favourites } = useFavourites();
   const { isDark, toggleTheme } = useTheme();
-  const { settings } = useSettings();
-  const whatsappNumber = settings?.whatsappNumber || "";
+   const { settings } = useStoreSettings();
+    const storeName = settings?.storeName || 'Your Store';
+    const whatsappNumber = settings?.whatsappNumber || "";
 
   function openWhatsApp() {
     if (whatsappNumber) {
-      window.location.href = `https://wa.me/${whatsappNumber}?text=Hello, *Thread Store!*.`;
+      window.location.href = `https://wa.me/${whatsappNumber}?text=Hello, *${storeName}!*.`;
     }
   }
 

@@ -24,7 +24,7 @@ export function SettingsProvider({ children }) {
     if (settings?.primaryColor) {
       applyPrimaryColor(settings.primaryColor);
     }
-  }, [settings?.primaryColor, applyPrimaryColor]);
+  }, [settings?.primaryColor]);
 
   // Update page title dynamically
   useEffect(() => {
