@@ -3,13 +3,14 @@ import { Logo } from "../common/Logo";
 import NavItems from "./AdminNavItems";
 import { useLogout } from "../../hooks/useLogout";
 import { LogOut } from "lucide-react";
+import GlassCard from "../common/GlassCard";
 
 export default function AdminSidebar() {
   const { pathname } = useLocation();
   const handleLogout = useLogout();
 
   return (
-    <aside className="fixed left-0 top-0 z-30 hidden h-full w-64 flex-col bg-gray-900 text-white dark:bg-gray-950 md:flex">
+    <GlassCard className="fixed left-0 top-0 z-30 hidden h-full w-64 flex-col bg-gray-900 text-white dark:bg-gray-950 md:flex">
       <div className="p-6">
         <Logo />
       </div>
@@ -28,6 +29,6 @@ export default function AdminSidebar() {
           Logout
         </button>
       </div>
-    </aside>
+    </GlassCard>
   );
 }

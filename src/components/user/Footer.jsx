@@ -1,13 +1,32 @@
-import { MessageCircle } from "lucide-react";
+import { MapPin, MessageCircle, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
-import useSettings from "../../hooks/useSettings";
+import { useStoreSettings } from "../../contexts/SettingsContext";
 import { Logo } from "../common/Logo";
 
 export default function Footer() {
-  const { settings } = useSettings();
+  const { settings } = useStoreSettings();
+  const storeName = settings?.storeName || 'Your Store';
   const whatsappNumber = settings?.whatsappNumber || "";
-  const instagramUrl =
-    settings?.instagramUrl || "https://www.instagram.com/threadstore___";
+  const instagramUrl = settings?.instagramUrl || "";
+  const storeTagline = settings?.storeTagline || "";
+  const hasPhysicalStore = settings?.hasPhysicalStore || false;
+  const address = settings?.address || "";
+  const openingHours = settings?.openingHours || "";
+  const mapUrl = settings?.mapUrl || "";
+
+  function openWhatsApp() {
+    if (whatsappNumber) {
+      window.location.href = `https://wa.me/${whatsappNumber}`;
+    }
+  }
+
+  function openInstagram() {
+    if (instagramUrl) {
+      window.location.href = instagramUrl;
+    } else {
+      window.location.href = "https://www.instagram.com";
+    }
+  }
 
   return (
     <footer
@@ -20,13 +39,44 @@ export default function Footer() {
     >
       <div className="mx-auto max-w-5xl">
         <div className="grid gap-8 md:grid-cols-3">
+
+          {/* Column 1 — Brand */}
           <div>
             <Logo />
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              Premium gents clothing store
-            </p>
+            {storeTagline && (
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                {storeTagline}
+              </p>
+            )}
+            {hasPhysicalStore && address && (
+              <div className="mt-3 flex items-start gap-2">
+                {mapUrl ? (
+                  <a
+                    href={mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-2 text-xs text-[var(--text-secondary)] hover:text-primary transition-colors"
+                  >
+                    <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    {address}
+                  </a>
+                ) : (
+                  <p className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                    <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    {address}
+                  </p>
+                )}
+              </div>
+            )}
+            {hasPhysicalStore && openingHours && (
+              <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-secondary)]">
+                <Clock className="h-3.5 w-3.5 shrink-0" />
+                {openingHours}
+              </div>
+            )}
           </div>
 
+          {/* Column 2 — Quick Links */}
           <div>
             <h3 className="font-outfit font-semibold text-[var(--text-primary)]">
               Quick Links
@@ -48,30 +98,28 @@ export default function Footer() {
             </nav>
           </div>
 
+          {/* Column 3 — Contact */}
           <div>
             <h3 className="font-outfit font-semibold text-[var(--text-primary)]">
               Contact Us
             </h3>
             <div className="mt-3 flex flex-col gap-2">
-              {whatsappNumber && (
-                <a
-                  href={`https://wa.me/${whatsappNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-primary"
+                <button
+                  type="button"
+                  onClick={openWhatsApp}
+                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-primary text-left"
                 >
-                  <MessageCircle className="h-4 w-4" />
+                  <MessageCircle className="h-4 w-4 shrink-0" />
                   Chat on WhatsApp
-                </a>
-              )}
-              <a
-                href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-primary"
-              >
-                {/* <Instagram className="h-4 w-4" /> */}@ Chat on Instagram
-              </a>
+                </button>
+                <button
+                  type="button"
+                  onClick={openInstagram}
+                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-primary text-left"
+                >
+                  <span className="text-sm">@</span>
+                  Instagram
+                </button>
             </div>
           </div>
         </div>
@@ -80,7 +128,7 @@ export default function Footer() {
           className="mt-8 border-t pt-6 text-center text-xs text-[var(--text-secondary)]"
           style={{ borderColor: "var(--border)" }}
         >
-          © {new Date().getFullYear()} Thread Store. All rights reserved.
+          © {new Date().getFullYear()} {storeName}. All rights reserved.
         </div>
       </div>
     </footer>

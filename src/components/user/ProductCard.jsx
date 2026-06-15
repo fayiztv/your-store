@@ -4,12 +4,42 @@ import { useNavigate } from "react-router-dom";
 import { useFavourites } from "../../contexts/FavouritesContext";
 import { cardVariants } from "../../utils/constents";
 
+// Helper: get price range string from variants
+function getVariantPriceRange(variants) {
+  if (!variants || variants.length === 0) return null;
+  const prices = variants.map((v) => v.offerPrice ?? v.price).filter(Boolean);
+  if (prices.length === 0) return null;
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  return min === max ? `₹${min}` : `₹${min} – ₹${max}`;
+}
+
+// Helper: check if any variant has an offer
+function hasAnyOffer(variants) {
+  return variants?.some((v) => v.offerPrice != null && v.offerPrice > 0);
+}
+
 export default function ProductCard({ product, layout = "vertical" }) {
   const navigate = useNavigate();
   const { isFavourite, addFavourite, removeFavourite } = useFavourites();
   const favourited = isFavourite(product.id);
-  const hasOffer = product.offerPrice != null && product.offerPrice > 0;
+
+  const hasVariants = product.variants && product.variants.length > 0;
   const categoryLabel = product.categoryName || product.category || "General";
+
+  // Simple product pricing
+  const hasOffer = !hasVariants && product.offerPrice != null && product.offerPrice > 0;
+
+  // Variant price range
+  const priceRange = hasVariants ? getVariantPriceRange(product.variants) : null;
+
+  // Color swatches (for color/size_color variants)
+  const colorVariants = hasVariants
+    ? product.variants.filter((v) => v.colorHex).reduce((acc, v) => {
+        if (!acc.find((c) => c.colorHex === v.colorHex)) acc.push(v);
+        return acc;
+      }, [])
+    : [];
 
   function handleCardClick() {
     navigate(`/product/${product.id}`);
@@ -21,7 +51,34 @@ export default function ProductCard({ product, layout = "vertical" }) {
     else addFavourite(product);
   }
 
-  // ─── HORIZONTAL LAYOUT (mobile products page only) ───────────────────────
+  // ─── PRICE DISPLAY ───
+  function PriceDisplay({ size = 'normal' }) {
+    const bigClass = size === 'big' ? 'text-lg' : 'text-base';
+    const smallClass = size === 'big' ? 'text-sm' : 'text-xs';
+
+    if (hasVariants) {
+      return (
+        <span className={`font-outfit font-bold text-primary ${bigClass}`}>
+          {priceRange}
+        </span>
+      );
+    }
+    if (hasOffer) {
+      return (
+        <div className="flex items-end gap-1.5">
+          <span className={`text-[var(--text-secondary)] line-through ${smallClass}`}>₹{product.price}</span>
+          <span className={`font-outfit font-bold text-primary ${bigClass}`}>₹{product.offerPrice}</span>
+        </div>
+      );
+    }
+    return (
+      <span className={`font-outfit font-bold text-[var(--text-primary)] ${bigClass}`}>
+        ₹{product.price ?? "—"}
+      </span>
+    );
+  }
+
+  // ─── HORIZONTAL LAYOUT ───
   if (layout === "horizontal") {
     return (
       <motion.div
@@ -31,20 +88,12 @@ export default function ProductCard({ product, layout = "vertical" }) {
         onClick={handleCardClick}
         className="flex min-h-[110px] w-full cursor-pointer flex-row overflow-hidden rounded-2xl bg-[var(--card-bg)] shadow-sm"
       >
-        {/* LEFT — image */}
         <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-l-3xl">
           {product.images?.[0] ? (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="h-full w-full object-cover"
-            />
+            <img src={product.images[0]} alt={product.name} className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-black/5 dark:bg-white/5">
-              <Shirt
-                className="h-8 w-8 text-[var(--text-secondary)]"
-                strokeWidth={1.2}
-              />
+              <Shirt className="h-8 w-8 text-[var(--text-secondary)]" strokeWidth={1.2} />
             </div>
           )}
           {product.isFeatured && (
@@ -54,14 +103,11 @@ export default function ProductCard({ product, layout = "vertical" }) {
           )}
           {product.inStock === false && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-              <span className="text-center font-outfit text-[10px] font-semibold text-white">
-                Out of Stock
-              </span>
+              <span className="text-center font-outfit text-[10px] font-semibold text-white">Out of Stock</span>
             </div>
           )}
         </div>
 
-        {/* RIGHT — details */}
         <div className="flex flex-1 flex-col justify-between p-3">
           <div>
             <h3 className="line-clamp-2 font-outfit text-sm font-semibold text-[var(--text-primary)]">
@@ -70,42 +116,30 @@ export default function ProductCard({ product, layout = "vertical" }) {
             <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
               {categoryLabel}
             </span>
-            {product.sizes?.length > 0 && (
+
+            {/* Color swatches */}
+            {colorVariants.length > 0 && (
+              <div className="mt-1 flex gap-1">
+                {colorVariants.slice(0, 5).map((v) => (
+                  <div key={v.colorHex} className="h-3 w-3 rounded-full border border-gray-200"
+                    style={{ backgroundColor: v.colorHex }} title={v.color} />
+                ))}
+              </div>
+            )}
+
+            {/* Size labels (non-color variants) */}
+            {hasVariants && colorVariants.length === 0 && (
               <p className="mt-0.5 text-xs text-[var(--text-secondary)]">
-                {product.sizes.join(" · ")}
+                {product.variants.map((v) => v.label || v.size).filter(Boolean).join(' · ')}
               </p>
             )}
           </div>
+
           <div className="mt-2 flex items-center justify-between">
-            <div className="flex items-end gap-1.5">
-              {hasOffer ? (
-                <>
-                  <span className="text-xs text-[var(--text-secondary)] line-through">
-                    ₹{product.price}
-                  </span>
-                  <span className="font-outfit text-base font-bold text-primary">
-                    ₹{product.offerPrice}
-                  </span>
-                </>
-              ) : (
-                <span className="font-outfit text-base font-bold text-[var(--text-primary)]">
-                  ₹{product.price ?? product.offerPrice ?? "—"}
-                </span>
-              )}
-            </div>
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.85 }}
-              onClick={handleHeartClick}
-              className="rounded-xl p-2 transition-colors hover:bg-primary/10"
-            >
-              <Heart
-                className={`h-4 w-4 transition-colors ${
-                  favourited
-                    ? "fill-red-500 text-red-500"
-                    : "text-[var(--text-secondary)]"
-                }`}
-              />
+            <PriceDisplay />
+            <motion.button type="button" whileTap={{ scale: 0.85 }} onClick={handleHeartClick}
+              className="rounded-xl p-2 transition-colors hover:bg-primary/10">
+              <Heart className={`h-4 w-4 transition-colors ${favourited ? "fill-red-500 text-red-500" : "text-[var(--text-secondary)]"}`} />
             </motion.button>
           </div>
         </div>
@@ -113,7 +147,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
     );
   }
 
-  // ─── VERTICAL LAYOUT (default — home, favourites, desktop) ───────────────
+  // ─── VERTICAL LAYOUT ───
   return (
     <motion.div
       variants={cardVariants}
@@ -122,20 +156,13 @@ export default function ProductCard({ product, layout = "vertical" }) {
       onClick={handleCardClick}
       className="flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-[var(--card-bg)] shadow-md"
     >
-      {/* Image */}
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {product.images?.[0] ? (
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-          />
+          <img src={product.images[0]} alt={product.name}
+            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-black/5 dark:bg-white/5">
-            <Shirt
-              className="h-12 w-12 text-[var(--text-secondary)]"
-              strokeWidth={1.2}
-            />
+            <Shirt className="h-12 w-12 text-[var(--text-secondary)]" strokeWidth={1.2} />
           </div>
         )}
         {product.isFeatured && (
@@ -145,14 +172,11 @@ export default function ProductCard({ product, layout = "vertical" }) {
         )}
         {product.inStock === false && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <span className="font-outfit text-sm font-semibold text-white">
-              Out of Stock
-            </span>
+            <span className="font-outfit text-sm font-semibold text-white">Out of Stock</span>
           </div>
         )}
       </div>
 
-      {/* Details */}
       <div className="flex flex-1 flex-col justify-between p-4">
         <div>
           <h3 className="line-clamp-1 font-outfit text-base font-semibold text-[var(--text-primary)]">
@@ -161,42 +185,30 @@ export default function ProductCard({ product, layout = "vertical" }) {
           <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
             {categoryLabel}
           </span>
-          {product.sizes?.length > 0 && (
+
+          {/* Color swatches */}
+          {colorVariants.length > 0 && (
+            <div className="mt-1.5 flex gap-1.5">
+              {colorVariants.slice(0, 6).map((v) => (
+                <div key={v.colorHex} className="h-4 w-4 rounded-full border border-gray-200"
+                  style={{ backgroundColor: v.colorHex }} title={v.color} />
+              ))}
+            </div>
+          )}
+
+          {/* Size/label info */}
+          {hasVariants && colorVariants.length === 0 && (
             <p className="mt-1 text-xs text-[var(--text-secondary)]">
-              Sizes: {product.sizes.join(" ")}
+              {product.variants.map((v) => v.label || v.size).filter(Boolean).join(' · ')}
             </p>
           )}
         </div>
+
         <div className="mt-3 flex items-center justify-between">
-          <div className="flex items-end gap-2">
-            {hasOffer ? (
-              <>
-                <span className="text-sm text-[var(--text-secondary)] line-through">
-                  ₹{product.price}
-                </span>
-                <span className="font-outfit text-lg font-bold text-primary">
-                  ₹{product.offerPrice}
-                </span>
-              </>
-            ) : (
-              <span className="font-outfit text-lg font-bold text-[var(--text-primary)]">
-                ₹{product.price ?? product.offerPrice ?? "—"}
-              </span>
-            )}
-          </div>
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.85 }}
-            onClick={handleHeartClick}
-            className="rounded-xl p-2 transition-colors hover:bg-primary/10"
-          >
-            <Heart
-              className={`h-5 w-5 transition-colors ${
-                favourited
-                  ? "fill-red-500 text-red-500"
-                  : "text-[var(--text-secondary)]"
-              }`}
-            />
+          <PriceDisplay size="big" />
+          <motion.button type="button" whileTap={{ scale: 0.85 }} onClick={handleHeartClick}
+            className="rounded-xl p-2 transition-colors hover:bg-primary/10">
+            <Heart className={`h-5 w-5 transition-colors ${favourited ? "fill-red-500 text-red-500" : "text-[var(--text-secondary)]"}`} />
           </motion.button>
         </div>
       </div>

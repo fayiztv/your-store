@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
   const { currentUser, login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -18,17 +18,16 @@ export default function AdminLogin() {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
-
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       await login(email, password);
-      navigate('/admin/dashboard');
+      navigate("/admin/dashboard");
     } catch {
-      setError('Invalid email or password');
+      setError("Invalid email or password");
       setLoading(false);
     }
   }
@@ -44,10 +43,10 @@ export default function AdminLogin() {
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-lg font-bold text-white">
-              T
+              YT
             </span>
             <span className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
-              Thread Store
+              Your Store
             </span>
           </div>
           <p className="mt-1 text-center text-sm text-gray-400 dark:text-gray-500">
@@ -70,7 +69,7 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
-              placeholder="admin@threadstore.com"
+              placeholder="admin@yourstore.com"
             />
           </div>
 
@@ -84,7 +83,7 @@ export default function AdminLogin() {
             <div className="relative">
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -95,7 +94,7 @@ export default function AdminLogin() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -104,9 +103,7 @@ export default function AdminLogin() {
                 )}
               </button>
             </div>
-            {error && (
-              <p className="mt-2 text-sm text-red-500">{error}</p>
-            )}
+            {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
           </div>
 
           <motion.button
@@ -122,7 +119,7 @@ export default function AdminLogin() {
                 Signing in...
               </>
             ) : (
-              'Login'
+              "Login"
             )}
           </motion.button>
         </form>

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFavourites } from "../../contexts/FavouritesContext";
-import useSettings from "../../hooks/useSettings";
+import { useStoreSettings } from "../../contexts/SettingsContext";
 import { Logo } from "../common/Logo";
 import { ThemeToggle } from "../common/ThemeToggle";
 
@@ -24,13 +24,14 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { count } = useFavourites();
-  const { settings } = useSettings();
+  const { settings } = useStoreSettings();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const whatsappNumber = settings?.whatsappNumber || "";
   const instagramUrl = settings?.instagramUrl || "";
+  const storeName = settings?.storeName || "Your Store";
 
   function isActive(path) {
     if (path === "/") return pathname === "/";
@@ -42,24 +43,18 @@ export default function Navbar() {
     const q = searchQuery.trim();
     setSearchOpen(false);
     setMobileOpen(false);
-    if (q) {
-      navigate(`/products?search=${encodeURIComponent(q)}`);
-    } else {
-      navigate("/products");
-    }
+    if (q) navigate(`/products?search=${encodeURIComponent(q)}`);
+    else navigate("/products");
   }
 
   function openInstagram() {
-    if (instagramUrl) {
-      window.location.href = `${instagramUrl}`;
-    } else {
-      window.location.href = "https://www.instagram.com";
-    }
+    if (instagramUrl) window.location.href = instagramUrl;
+    else window.location.href = "https://www.instagram.com";
   }
 
   function openWhatsApp() {
     if (whatsappNumber) {
-      window.location.href = `https://wa.me/${whatsappNumber}?text=Hello, *Thread Store!*.`;
+      window.location.href = `https://wa.me/${whatsappNumber}?text=Hello, *${storeName}!*.`;
     }
   }
 
@@ -90,13 +85,15 @@ export default function Navbar() {
                   {label}
                 </Link>
               ))}
-              <button
-                type="button"
-                onClick={openInstagram}
-                className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-primary"
-              >
-                Instagram
-              </button>
+              {instagramUrl && (
+                <button
+                  type="button"
+                  onClick={openInstagram}
+                  className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-primary"
+                >
+                  Instagram
+                </button>
+              )}
               <button
                 type="button"
                 onClick={openWhatsApp}
@@ -126,8 +123,9 @@ export default function Navbar() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search products..."
+                      style={{ fontSize: '16px' }}
                       className="w-full rounded-full border bg-[var(--surface)] py-2 pl-9 pr-4 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-primary"
-                      style={{ borderColor: "var(--border)" }}
+                      style={{ borderColor: "var(--border)", fontSize: '16px' }}
                     />
                   </div>
                 </motion.form>
@@ -186,7 +184,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-lg md:hidden"
               onClick={() => setMobileOpen(false)}
             />
             <motion.aside
@@ -202,10 +200,7 @@ export default function Navbar() {
                 style={{ borderColor: "var(--border)" }}
               >
                 <Logo
-                  onClick={() => {
-                    navigate("/");
-                    setMobileOpen(false);
-                  }}
+                  onClick={() => { navigate("/"); setMobileOpen(false); }}
                   light
                 />
                 <button
@@ -223,14 +218,9 @@ export default function Navbar() {
                   <button
                     key={to}
                     type="button"
-                    onClick={() => {
-                      navigate(to);
-                      setMobileOpen(false);
-                    }}
+                    onClick={() => { navigate(to); setMobileOpen(false); }}
                     className={`flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium transition-colors ${
-                      isActive(to)
-                        ? "text-primary"
-                        : "text-gray-300 hover:text-white"
+                      isActive(to) ? "text-primary" : "text-gray-300 hover:text-white"
                     }`}
                     style={{ borderColor: "var(--border)" }}
                   >
@@ -241,10 +231,7 @@ export default function Navbar() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    navigate("/favourites");
-                    setMobileOpen(false);
-                  }}
+                  onClick={() => { navigate("/favourites"); setMobileOpen(false); }}
                   className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
                   style={{ borderColor: "var(--border)" }}
                 >
@@ -259,10 +246,7 @@ export default function Navbar() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    openWhatsApp();
-                    setMobileOpen(false);
-                  }}
+                  onClick={() => { openWhatsApp(); setMobileOpen(false); }}
                   className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
                   style={{ borderColor: "var(--border)" }}
                 >
@@ -270,24 +254,19 @@ export default function Navbar() {
                   Contact
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    openInstagram();
-                    setMobileOpen(false);
-                  }}
-                  className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
-                  style={{ borderColor: "var(--border)" }}
-                >
-                  {/* <Instagram className="h-5 w-5" /> */}
-                  Instagram
-                </button>
+                {instagramUrl && (
+                  <button
+                    type="button"
+                    onClick={() => { openInstagram(); setMobileOpen(false); }}
+                    className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
+                    style={{ borderColor: "var(--border)" }}
+                  >
+                    Instagram
+                  </button>
+                )}
               </nav>
 
-              <div
-                className="border-t p-4"
-                style={{ borderColor: "var(--border)" }}
-              >
+              <div className="border-t p-4" style={{ borderColor: "var(--border)" }}>
                 <form onSubmit={handleSearch} className="mb-4">
                   <div className="relative">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -296,6 +275,7 @@ export default function Navbar() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search products..."
+                      style={{ fontSize: '16px' }}
                       className="w-full rounded-xl border border-gray-700 bg-gray-800 py-2.5 pl-10 pr-4 text-sm text-white outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>

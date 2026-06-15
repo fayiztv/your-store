@@ -88,6 +88,6 @@ export const cardVariantsHome = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-export const THEME_KEY = 'thread_theme';
+export const THEME_KEY = 'store_theme';
 
 export const PER_PAGE = 5;

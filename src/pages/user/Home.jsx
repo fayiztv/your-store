@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Shirt, Tag } from "lucide-react";
+import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import { collection, onSnapshot } from "firebase/firestore";
 import ProductCard from "../../components/user/ProductCard";
 import useProducts from "../../hooks/useProducts";
@@ -42,7 +42,7 @@ export default function Home() {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % banners.length);
-    }, 10000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [hasBanners, banners.length]);
 
@@ -156,10 +156,10 @@ export default function Home() {
           ) : (
             <div className="flex h-64 flex-col items-center justify-center bg-gradient-to-r from-primary to-primary-dark px-6 text-center md:h-96">
               <h2 className="font-outfit text-3xl font-bold text-white md:text-5xl">
-                Welcome to Thread Store
+                Welcome to Your Store
               </h2>
               <p className="mt-2 text-sm text-white/80 md:text-base">
-                Premium gents clothing curated for you
+                Premium Products curated for you
               </p>
               <motion.button
                 type="button"

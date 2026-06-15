@@ -1,36 +1,25 @@
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 
+// Real time settings hook ------ updates instantly when admin changes settings
 export default function useSettings() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function fetchSettings() {
-      try {
-        const snap = await getDoc(doc(db, 'settings', 'main'));
-        if (!cancelled) {
-          setSettings(snap.exists() ? snap.data() : null);
-        }
-      } catch {
-        if (!cancelled) {
-          setSettings(null);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+    const unsubscribe = onSnapshot(
+      doc(db, 'settings', 'main'),
+      (snap) => {
+        setSettings(snap.exists() ? snap.data() : null);
+        setLoading(false);
+      },
+      () => {
+        setSettings(null);
+        setLoading(false);
       }
-    }
-
-    fetchSettings();
-
-    return () => {
-      cancelled = true;
-    };
+    );
+    return unsubscribe;
   }, []);
 
   return { settings, loading };
