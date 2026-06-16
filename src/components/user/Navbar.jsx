@@ -1,24 +1,12 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Heart,
-  Home,
-  Menu,
-  MessageCircle,
-  Package,
-  Search,
-  X,
-} from "lucide-react";
+import { Heart, Menu, MessageCircle, Search, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFavourites } from "../../contexts/FavouritesContext";
 import { useStoreSettings } from "../../contexts/SettingsContext";
 import { Logo } from "../common/Logo";
 import { ThemeToggle } from "../common/ThemeToggle";
-
-const navLinks = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/products", label: "Products", icon: Package },
-];
+import { userNavLinks } from "../../utils/constents";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -69,10 +57,10 @@ export default function Navbar() {
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
           <div className="flex items-center gap-8">
-            <Logo onClick={() => navigate("/")} light={false}/>
+            <Logo onClick={() => navigate("/")} light={false} />
 
             <nav className="hidden items-center gap-6 md:flex">
-              {navLinks.map(({ to, label }) => (
+              {userNavLinks.map(({ to, label }) => (
                 <Link
                   key={to}
                   to={to}
@@ -123,9 +111,9 @@ export default function Navbar() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search products..."
-                      style={{ fontSize: '16px' }}
-                      className="w-full rounded-full border bg-[var(--surface)] py-2 pl-9 pr-4 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-primary"
-                      style={{ borderColor: "var(--border)", fontSize: '16px' }}
+                      style={{ fontSize: "16px" }}
+                      className="w-full rounded-full bg-[var(--surface)] py-2 pl-9 pr-4 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-primary"
+                      style={{ borderColor: "var(--border)", fontSize: "16px" }}
                     />
                   </div>
                 </motion.form>
@@ -192,15 +180,18 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ type: "tween", duration: 0.25 }}
-              className="fixed left-0 top-0 z-[70] flex h-full w-[280px] flex-col md:hidden"
-              style={{ backgroundColor: "var(--sidebar-bg)" }}
+              className="fixed left-0 top-0 z-[70] flex h-full w-[280px] flex-col md:hidden bg-black"
+              // style={{ backgroundColor: "var(--sidebar-bg)" }}
             >
               <div
                 className="flex items-center justify-between border-b p-4"
                 style={{ borderColor: "var(--border)" }}
               >
                 <Logo
-                  onClick={() => { navigate("/"); setMobileOpen(false); }}
+                  onClick={() => {
+                    navigate("/");
+                    setMobileOpen(false);
+                  }}
                   light
                 />
                 <button
@@ -213,73 +204,63 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <nav className="flex-1">
-                {navLinks.map(({ to, label, icon: Icon }) => (
+              <nav className="flex-1 p-2">
+                {userNavLinks.map(({ to, label, icon: Icon }) => (
                   <button
                     key={to}
                     type="button"
-                    onClick={() => { navigate(to); setMobileOpen(false); }}
-                    className={`flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium transition-colors ${
-                      isActive(to) ? "text-primary" : "text-gray-300 hover:text-white"
+                    onClick={() => {
+                      navigate(to);
+                      setMobileOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium transition-colors ${
+                      isActive(to)
+                        ? "bg-primary text-gray"
+                        : "text-gray-400 hover:bg-gray-800 hover:text-white"
                     }`}
                     style={{ borderColor: "var(--border)" }}
                   >
                     <Icon className="h-5 w-5" />
                     {label}
+                    {label === "Favourites" && count > 0 && (
+                      <span className="ml-auto rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                        {count}
+                      </span>
+                    )}
                   </button>
                 ))}
 
                 <button
                   type="button"
-                  onClick={() => { navigate("/favourites"); setMobileOpen(false); }}
-                  className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
-                  style={{ borderColor: "var(--border)" }}
-                >
-                  <Heart className="h-5 w-5" />
-                  Favourites
-                  {count > 0 && (
-                    <span className="ml-auto rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
-                      {count}
-                    </span>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => { openWhatsApp(); setMobileOpen(false); }}
-                  className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
-                  style={{ borderColor: "var(--border)" }}
+                  onClick={() => {
+                    openWhatsApp();
+                    setMobileOpen(false);
+                  }}
+                  className="flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium text-gray-400 transition-colors hover:text-white"
                 >
                   <MessageCircle className="h-5 w-5" />
-                  Contact
+                  WhatsApp
                 </button>
 
                 {instagramUrl && (
                   <button
                     type="button"
-                    onClick={() => { openInstagram(); setMobileOpen(false); }}
-                    className="flex w-full items-center gap-3 border-b px-6 py-4 text-left text-sm font-medium text-gray-300 transition-colors hover:text-white"
-                    style={{ borderColor: "var(--border)" }}
+                    onClick={() => {
+                      openInstagram();
+                      setMobileOpen(false);
+                    }}
+                    className="flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium text-gray-400 transition-colors hover:text-white"
                   >
+                    <MessageCircle className="h-5 w-5" />
                     Instagram
                   </button>
                 )}
               </nav>
 
-              <div className="border-t p-4" style={{ borderColor: "var(--border)" }}>
-                <form onSubmit={handleSearch} className="mb-4">
-                  <div className="relative">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="search"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search products..."
-                      style={{ fontSize: '16px' }}
-                      className="w-full rounded-xl border border-gray-700 bg-gray-800 py-2.5 pl-10 pr-4 text-sm text-white outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                </form>
+              <div
+                className="border-t p-4"
+                style={{ borderColor: "var(--border)" }}
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">Dark Mode</span>
                   <ThemeToggle light />

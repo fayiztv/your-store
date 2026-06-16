@@ -28,17 +28,22 @@ export default function ProductCard({ product, layout = "vertical" }) {
   const categoryLabel = product.categoryName || product.category || "General";
 
   // Simple product pricing
-  const hasOffer = !hasVariants && product.offerPrice != null && product.offerPrice > 0;
+  const hasOffer =
+    !hasVariants && product.offerPrice != null && product.offerPrice > 0;
 
   // Variant price range
-  const priceRange = hasVariants ? getVariantPriceRange(product.variants) : null;
+  const priceRange = hasVariants
+    ? getVariantPriceRange(product.variants)
+    : null;
 
   // Color swatches (for color/size_color variants)
   const colorVariants = hasVariants
-    ? product.variants.filter((v) => v.colorHex).reduce((acc, v) => {
-        if (!acc.find((c) => c.colorHex === v.colorHex)) acc.push(v);
-        return acc;
-      }, [])
+    ? product.variants
+        .filter((v) => v.colorHex)
+        .reduce((acc, v) => {
+          if (!acc.find((c) => c.colorHex === v.colorHex)) acc.push(v);
+          return acc;
+        }, [])
     : [];
 
   function handleCardClick() {
@@ -52,9 +57,9 @@ export default function ProductCard({ product, layout = "vertical" }) {
   }
 
   // ─── PRICE DISPLAY ───
-  function PriceDisplay({ size = 'normal' }) {
-    const bigClass = size === 'big' ? 'text-lg' : 'text-base';
-    const smallClass = size === 'big' ? 'text-sm' : 'text-xs';
+  function PriceDisplay({ size = "normal" }) {
+    const bigClass = size === "big" ? "text-lg" : "text-base";
+    const smallClass = size === "big" ? "text-sm" : "text-xs";
 
     if (hasVariants) {
       return (
@@ -66,13 +71,21 @@ export default function ProductCard({ product, layout = "vertical" }) {
     if (hasOffer) {
       return (
         <div className="flex items-end gap-1.5">
-          <span className={`text-[var(--text-secondary)] line-through ${smallClass}`}>₹{product.price}</span>
-          <span className={`font-outfit font-bold text-primary ${bigClass}`}>₹{product.offerPrice}</span>
+          <span
+            className={`text-[var(--text-secondary)] line-through ${smallClass}`}
+          >
+            ₹{product.price}
+          </span>
+          <span className={`font-outfit font-bold text-primary ${bigClass}`}>
+            ₹{product.offerPrice}
+          </span>
         </div>
       );
     }
     return (
-      <span className={`font-outfit font-bold text-[var(--text-primary)] ${bigClass}`}>
+      <span
+        className={`font-outfit font-bold text-[var(--text-primary)] ${bigClass}`}
+      >
         ₹{product.price ?? "—"}
       </span>
     );
@@ -90,10 +103,17 @@ export default function ProductCard({ product, layout = "vertical" }) {
       >
         <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-l-3xl">
           {product.images?.[0] ? (
-            <img src={product.images[0]} alt={product.name} className="h-full w-full object-cover" />
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-black/5 dark:bg-white/5">
-              <Shirt className="h-8 w-8 text-[var(--text-secondary)]" strokeWidth={1.2} />
+              <Shirt
+                className="h-8 w-8 text-[var(--text-secondary)]"
+                strokeWidth={1.2}
+              />
             </div>
           )}
           {product.isFeatured && (
@@ -103,7 +123,9 @@ export default function ProductCard({ product, layout = "vertical" }) {
           )}
           {product.inStock === false && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-              <span className="text-center font-outfit text-[10px] font-semibold text-white">Out of Stock</span>
+              <span className="text-center font-outfit text-[10px] font-semibold text-white">
+                Out of Stock
+              </span>
             </div>
           )}
         </div>
@@ -121,8 +143,12 @@ export default function ProductCard({ product, layout = "vertical" }) {
             {colorVariants.length > 0 && (
               <div className="mt-1 flex gap-1">
                 {colorVariants.slice(0, 5).map((v) => (
-                  <div key={v.colorHex} className="h-3 w-3 rounded-full border border-gray-200"
-                    style={{ backgroundColor: v.colorHex }} title={v.color} />
+                  <div
+                    key={v.colorHex}
+                    className="h-3 w-3 rounded-full border border-gray-200"
+                    style={{ backgroundColor: v.colorHex }}
+                    title={v.color}
+                  />
                 ))}
               </div>
             )}
@@ -130,16 +156,25 @@ export default function ProductCard({ product, layout = "vertical" }) {
             {/* Size labels (non-color variants) */}
             {hasVariants && colorVariants.length === 0 && (
               <p className="mt-0.5 text-xs text-[var(--text-secondary)]">
-                {product.variants.map((v) => v.label || v.size).filter(Boolean).join(' · ')}
+                {product.variants
+                  .map((v) => v.label || v.size)
+                  .filter(Boolean)
+                  .join(" · ")}
               </p>
             )}
           </div>
 
           <div className="mt-2 flex items-center justify-between">
             <PriceDisplay />
-            <motion.button type="button" whileTap={{ scale: 0.85 }} onClick={handleHeartClick}
-              className="rounded-xl p-2 transition-colors hover:bg-primary/10">
-              <Heart className={`h-4 w-4 transition-colors ${favourited ? "fill-red-500 text-red-500" : "text-[var(--text-secondary)]"}`} />
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.85 }}
+              onClick={handleHeartClick}
+              className="rounded-xl p-2 transition-colors hover:bg-primary/10"
+            >
+              <Heart
+                className={`h-4 w-4 transition-colors ${favourited ? "fill-red-500 text-red-500" : "text-[var(--text-secondary)]"}`}
+              />
             </motion.button>
           </div>
         </div>
@@ -158,11 +193,17 @@ export default function ProductCard({ product, layout = "vertical" }) {
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {product.images?.[0] ? (
-          <img src={product.images[0]} alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-black/5 dark:bg-white/5">
-            <Shirt className="h-12 w-12 text-[var(--text-secondary)]" strokeWidth={1.2} />
+            <Shirt
+              className="h-12 w-12 text-[var(--text-secondary)]"
+              strokeWidth={1.2}
+            />
           </div>
         )}
         {product.isFeatured && (
@@ -172,7 +213,9 @@ export default function ProductCard({ product, layout = "vertical" }) {
         )}
         {product.inStock === false && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <span className="font-outfit text-sm font-semibold text-white">Out of Stock</span>
+            <span className="font-outfit text-sm font-semibold text-white">
+              Out of Stock
+            </span>
           </div>
         )}
       </div>
@@ -187,28 +230,42 @@ export default function ProductCard({ product, layout = "vertical" }) {
           </span>
 
           {/* Color swatches */}
-          {colorVariants.length > 0 && (
-            <div className="mt-1.5 flex gap-1.5">
-              {colorVariants.slice(0, 6).map((v) => (
-                <div key={v.colorHex} className="h-4 w-4 rounded-full border border-gray-200"
-                  style={{ backgroundColor: v.colorHex }} title={v.color} />
-              ))}
-            </div>
-          )}
-
-          {/* Size/label info */}
-          {hasVariants && colorVariants.length === 0 && (
-            <p className="mt-1 text-xs text-[var(--text-secondary)]">
-              {product.variants.map((v) => v.label || v.size).filter(Boolean).join(' · ')}
-            </p>
-          )}
+          <div className="mt-1 min-h-[22px]">
+            {colorVariants.length > 0 ? (
+              <div className="flex gap-1.5">
+                {colorVariants.slice(0, 6).map((v) => (
+                  <div
+                    key={v.colorHex}
+                    className="h-4 w-4 rounded-full border border-gray-200"
+                    style={{ backgroundColor: v.colorHex }}
+                    title={v.color}
+                  />
+                ))}
+              </div>
+            ) : (
+              hasVariants && (
+                <p className="text-xs text-[var(--text-secondary)] line-clamp-1">
+                  {product.variants
+                    .map((v) => v.label || v.size)
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+              )
+            )}
+          </div>
         </div>
 
         <div className="mt-3 flex items-center justify-between">
           <PriceDisplay size="big" />
-          <motion.button type="button" whileTap={{ scale: 0.85 }} onClick={handleHeartClick}
-            className="rounded-xl p-2 transition-colors hover:bg-primary/10">
-            <Heart className={`h-5 w-5 transition-colors ${favourited ? "fill-red-500 text-red-500" : "text-[var(--text-secondary)]"}`} />
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.85 }}
+            onClick={handleHeartClick}
+            className="rounded-xl p-2 transition-colors hover:bg-primary/10"
+          >
+            <Heart
+              className={`h-5 w-5 transition-colors ${favourited ? "fill-red-500 text-red-500" : "text-[var(--text-secondary)]"}`}
+            />
           </motion.button>
         </div>
       </div>

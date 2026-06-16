@@ -16,20 +16,20 @@ export default function ImageGallery({ images = [] }) {
 
   return (
     <div className="w-full">
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-100">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={currentIndex}
-            src={galleryImages[currentIndex]}
-            alt={`Product view ${currentIndex + 1}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="h-full w-full object-cover"
-          />
-        </AnimatePresence>
-      </div>
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+  <AnimatePresence mode="wait">
+    <motion.img
+      key={currentIndex}
+      src={galleryImages[currentIndex]}
+      alt={`Product view ${currentIndex + 1}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="h-full w-full object-contain"
+    />
+  </AnimatePresence>
+</div>
 
       {galleryImages.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto hide-scrollbar">

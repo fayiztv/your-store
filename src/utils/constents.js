@@ -1,4 +1,4 @@
-import { AlertCircle, LayoutDashboard, Package, Settings, Star, Tag } from "lucide-react";
+import { AlertCircle, Heart, Home, LayoutDashboard, Package, Settings, Star, Tag } from "lucide-react";
 
 export const statConfig = [
   {
@@ -36,6 +36,12 @@ export const navLinks = [
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/categories", label: "Categories", icon: Tag },
   { to: "/admin/settings", label: "Settings", icon: Settings },
+];
+
+export const userNavLinks = [
+  { to: "/", label: "Home", icon: Home },
+  { to: "/products", label: "Products", icon: Package },
+  { to: "/favourites", label: "Favourites", icon: Heart },
 ];
 
 export const cardVariants = {
@@ -90,4 +96,4 @@ export const cardVariantsHome = {
 
 export const THEME_KEY = 'store_theme';
 
-export const PER_PAGE = 5;
+export const PER_PAGE = 6;
