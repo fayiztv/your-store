@@ -69,7 +69,7 @@ export default function Navbar() {
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
           <div className="flex items-center gap-8">
-            <Logo onClick={() => navigate("/")} />
+            <Logo onClick={() => navigate("/")} light={false}/>
 
             <nav className="hidden items-center gap-6 md:flex">
               {navLinks.map(({ to, label }) => (

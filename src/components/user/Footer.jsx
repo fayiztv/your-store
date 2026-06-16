@@ -42,7 +42,7 @@ export default function Footer() {
 
           {/* Column 1 — Brand */}
           <div>
-            <Logo />
+            <Logo light={false}/>
             {storeTagline && (
               <p className="mt-2 text-sm text-[var(--text-secondary)]">
                 {storeTagline}

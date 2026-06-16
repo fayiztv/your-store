@@ -1,7 +1,7 @@
 // Logo reads store name and logo from settings dynamically
 import { useStoreSettings } from "../../contexts/SettingsContext";
 
-export function Logo({ onClick, light = false }) {
+export function Logo({ onClick, light = true }) {
   const { settings } = useStoreSettings();
   const storeName = settings?.storeName || "Your Store";
   const logoText = settings?.logoText || storeName.charAt(0).toUpperCase();
