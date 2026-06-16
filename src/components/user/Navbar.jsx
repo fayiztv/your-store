@@ -111,8 +111,7 @@ export default function Navbar() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search products..."
-                      style={{ fontSize: "16px" }}
-                      className="w-full rounded-full bg-[var(--surface)] py-2 pl-9 pr-4 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full rounded-full bg-[var(--surface)] py-2 pl-9 pr-4 text-sm text-[var(--text-primary)] outline-none focus:border-primary"
                       style={{ borderColor: "var(--border)", fontSize: "16px" }}
                     />
                   </div>
@@ -181,7 +180,6 @@ export default function Navbar() {
               exit={{ x: -300 }}
               transition={{ type: "tween", duration: 0.25 }}
               className="fixed left-0 top-0 z-[70] flex h-full w-[280px] flex-col md:hidden bg-black"
-              // style={{ backgroundColor: "var(--sidebar-bg)" }}
             >
               <div
                 className="flex items-center justify-between border-b p-4"
