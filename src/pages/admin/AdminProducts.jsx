@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -10,6 +10,8 @@ import { db } from "../../firebase/firebase";
 import useProducts from "../../hooks/useProducts";
 import { ProductListSkeleton } from "../../components/admin/ProductListSkeleton";
 import GlassCard from "../../components/common/GlassCard";
+import { PER_PAGE } from "../../utils/constents";
+import { getPageNumbers } from "../../utils/helpers";
 
 const listVariants = {
   hidden: {},
@@ -63,12 +65,25 @@ export default function AdminProducts() {
   const [search, setSearch] = useState("");
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [gridKey, setGridKey] = useState(0);
+
+  useEffect(() => {
+      setCurrentPage(1);
+      setGridKey((k) => k + 1);
+    }, [search]);
 
   const filteredProducts = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) return products;
     return products.filter((p) => p.name?.toLowerCase().includes(query));
   }, [products, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PER_PAGE));
+    const paginatedProducts = filteredProducts.slice(
+      (currentPage - 1) * PER_PAGE,
+      currentPage * PER_PAGE,
+    );
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -82,6 +97,12 @@ export default function AdminProducts() {
     } finally {
       setDeleting(false);
     }
+  }
+
+  function goToPage(page) {
+    setCurrentPage(page);
+    setGridKey((k) => k + 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -116,7 +137,7 @@ export default function AdminProducts() {
 
       {loading ? (
         <ProductListSkeleton />
-      ) : filteredProducts.length === 0 ? (
+      ) : paginatedProducts.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -143,12 +164,13 @@ export default function AdminProducts() {
         </motion.div>
       ) : (
         <motion.div
+        key={gridKey}
           variants={listVariants}
           initial="hidden"
           animate="visible"
           className="space-y-3"
         >
-          {filteredProducts.map((product) => {
+          {paginatedProducts.map((product) => {
             const categoryLabel = product.categoryName || product.category || "General";
             const priceDisplay = getPriceDisplay(product);
             const variantSummary = getVariantSummary(product);
@@ -284,6 +306,65 @@ export default function AdminProducts() {
           })}
         </motion.div>
       )}
+
+      {totalPages > 1 && (
+                    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                      <motion.button
+                        type="button"
+                        whileTap={{ scale: 0.95 }}
+                        disabled={currentPage === 1}
+                        onClick={() => goToPage(currentPage - 1)}
+                        className="rounded-xl border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40"
+                        style={{
+                          borderColor: "var(--border)",
+                          color: "var(--text-primary)",
+                          backgroundColor: "var(--card-bg)",
+                        }}
+                      >
+                        Previous
+                      </motion.button>
+      
+                      {getPageNumbers(currentPage, totalPages).map((page) => (
+                        <motion.button
+                          key={page}
+                          type="button"
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => goToPage(page)}
+                          className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
+                            page === currentPage
+                              ? "border-primary bg-primary text-white"
+                              : ""
+                          }`}
+                          style={
+                            page !== currentPage
+                              ? {
+                                  borderColor: "var(--border)",
+                                  color: "var(--text-primary)",
+                                  backgroundColor: "var(--card-bg)",
+                                }
+                              : undefined
+                          }
+                        >
+                          {page}
+                        </motion.button>
+                      ))}
+      
+                      <motion.button
+                        type="button"
+                        whileTap={{ scale: 0.95 }}
+                        disabled={currentPage === totalPages}
+                        onClick={() => goToPage(currentPage + 1)}
+                        className="rounded-xl border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40"
+                        style={{
+                          borderColor: "var(--border)",
+                          color: "var(--text-primary)",
+                          backgroundColor: "var(--card-bg)",
+                        }}
+                      >
+                        Next
+                      </motion.button>
+                    </div>
+                  )}
 
       <AnimatePresence>
         {deleteTarget && (
