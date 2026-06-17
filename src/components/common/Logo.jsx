@@ -20,7 +20,7 @@ export function Logo({ onClick, light = true }) {
           className="h-8 w-8 rounded-lg object-cover"
         />
       ) : (
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-white text-sm">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--primary-dark)] font-bold text-white text-sm">
           {logoText}
         </span>
       )}

@@ -135,7 +135,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
             <h3 className="line-clamp-2 font-outfit text-sm font-semibold text-[var(--text-primary)]">
               {product.name}
             </h3>
-            <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
+            <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
               {categoryLabel}
             </span>
 
@@ -225,7 +225,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
           <h3 className="line-clamp-1 font-outfit text-base font-semibold text-[var(--text-primary)]">
             {product.name}
           </h3>
-          <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
+          <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
             {categoryLabel}
           </span>
 

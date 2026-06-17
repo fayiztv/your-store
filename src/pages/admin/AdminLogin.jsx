@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Logo } from "../../components/common/Logo";
 
 export default function AdminLogin() {
   const { currentUser, login } = useAuth();
@@ -41,14 +42,7 @@ export default function AdminLogin() {
         className="w-full max-w-md rounded-2xl border border-transparent bg-white p-8 shadow-lg dark:border-gray-800 dark:bg-gray-900"
       >
         <div className="flex flex-col items-center">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-lg font-bold text-white">
-              YT
-            </span>
-            <span className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
-              Your Store
-            </span>
-          </div>
+          <Logo/>
           <p className="mt-1 text-center text-sm text-gray-400 dark:text-gray-500">
             Admin Panel
           </p>
@@ -68,7 +62,7 @@ export default function AdminLogin() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
               placeholder="admin@yourstore.com"
             />
           </div>
@@ -87,7 +81,7 @@ export default function AdminLogin() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 pr-12 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 pr-12 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
                 placeholder="••••••••"
               />
               <button
@@ -111,7 +105,7 @@ export default function AdminLogin() {
             disabled={loading}
             whileHover={!loading ? { scale: 1.02 } : {}}
             whileTap={!loading ? { scale: 0.98 } : {}}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary-dark)] py-3 font-semibold text-white transition-colors hover:bg-[var(--primary-dark)] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? (
               <>

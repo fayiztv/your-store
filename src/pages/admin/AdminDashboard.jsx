@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { statConfig } from '../../utils/constents';
+import { SectionHeading } from '../../components/common/sectionHeading';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -54,9 +55,9 @@ export default function AdminDashboard() {
 
   return (
     <div>
-    <h2 className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
-          Dashboard
-        </h2>
+    <h2 className="mb-4 font-outfit text-lg font-semibold text-gray-900 dark:text-white">
+        <SectionHeading>Dashboard</SectionHeading>
+      </h2>
       <div className="grid grid-cols-2 gap-4 mt-5 lg:grid-cols-4">
         {statConfig.map((item, index) => {
           const Icon = item.icon;
@@ -85,7 +86,7 @@ export default function AdminDashboard() {
       </div>
 
       <h2 className="mb-4 mt-8 font-outfit text-lg font-semibold text-gray-900 dark:text-white">
-        Quick Actions
+        <SectionHeading>Quick Actions</SectionHeading>
       </h2>
       <div className="flex flex-col gap-4">
         <motion.button
@@ -93,7 +94,7 @@ export default function AdminDashboard() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate('/admin/products/new')}
-          className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark"
+          className="rounded-xl bg-[var(--primary-dark)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark"
         >
           Add New Product
         </motion.button>
@@ -102,7 +103,7 @@ export default function AdminDashboard() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate('/admin/categories')}
-          className="rounded-xl border border-primary px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5"
+          className="rounded-xl border border-[var(--primary-dark)] px-6 py-3 text-sm font-semibold text-[var(--primary-dark)] transition-colors hover:bg-primary/5"
         >
           Manage Categories
         </motion.button>

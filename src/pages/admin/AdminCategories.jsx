@@ -103,14 +103,14 @@ export default function AdminCategories() {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="New category name"
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           <motion.button
             type="submit"
             disabled={adding || !newName.trim()}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+            className="rounded-xl bg-[var(--primary-dark)] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
           >
             {adding ? "Adding..." : "Add"}
           </motion.button>
@@ -147,14 +147,14 @@ export default function AdminCategories() {
                       type="text"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                       autoFocus
                     />
                     <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={() => handleSaveEdit(cat.id)}
-                        className="flex-1 rounded-lg bg-primary py-1.5 text-xs font-semibold text-white"
+                        className="flex-1 rounded-lg bg-[var(--primary-dark)] py-1.5 text-xs font-semibold text-white"
                       >
                         Save
                       </button>
@@ -179,7 +179,7 @@ export default function AdminCategories() {
                           setEditingId(cat.id);
                           setEditName(cat.name);
                         }}
-                        className="rounded-lg p-2 text-blue-500 transition-colors hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                        className="rounded-lg p-2 text-[var(--primary-dark)] transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/20"
                         aria-label="Edit category"
                       >
                         <Pencil className="h-4 w-4" />

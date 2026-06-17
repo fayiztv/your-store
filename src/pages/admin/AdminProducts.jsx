@@ -12,6 +12,7 @@ import { ProductListSkeleton } from "../../components/admin/ProductListSkeleton"
 import GlassCard from "../../components/common/GlassCard";
 import { PER_PAGE } from "../../utils/constents";
 import { getPageNumbers } from "../../utils/helpers";
+import { SectionHeading } from "../../components/common/sectionHeading";
 
 const listVariants = {
   hidden: {},
@@ -107,16 +108,19 @@ export default function AdminProducts() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-4">
+        {/* <h2 className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
           Products
-        </h2>
+        </h2> */}
+        <h2 className="mt-4 font-outfit text-lg font-semibold text-gray-900 dark:text-white">
+        <SectionHeading>Products</SectionHeading>
+      </h2>
         <motion.button
           type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/admin/products/new")}
-          className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm"
+          className="flex items-center gap-2 rounded-xl bg-[var(--primary-dark)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm"
         >
           <Plus className="h-4 w-4" />
           Add New Product
@@ -130,7 +134,7 @@ export default function AdminProducts() {
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 md:max-w-md"
+          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all focus:border-[var(--primary-dark)] focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 md:max-w-md"
           style={{ fontSize: "16px" }}
         />
       </div>
@@ -156,7 +160,7 @@ export default function AdminProducts() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate("/admin/products/new")}
-              className="mt-6 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white"
+              className="mt-6 rounded-xl bg-[var(--primary-dark)] px-6 py-2.5 text-sm font-semibold text-white"
             >
               Add New Product
             </motion.button>
@@ -202,7 +206,7 @@ export default function AdminProducts() {
 
                     {/* Category + variant summary */}
                     <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                      <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                      <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary-dark)]">
                         {categoryLabel}
                       </span>
 
@@ -234,7 +238,7 @@ export default function AdminProducts() {
                     {/* Price display */}
                     <div className="mt-1 flex items-center gap-2">
                       {priceDisplay.type === 'range' ? (
-                        <span className={`text-sm font-semibold ${priceDisplay.hasOffer ? 'text-primary' : 'text-gray-900 dark:text-white'}`}>
+                        <span className={`text-sm font-semibold ${priceDisplay.hasOffer ? 'text-[var(--primary-dark)]' : 'text-gray-900 dark:text-white'}`}>
                           {priceDisplay.range}
                         </span>
                       ) : priceDisplay.hasOffer ? (
@@ -242,7 +246,7 @@ export default function AdminProducts() {
                           <span className="text-sm text-gray-400 line-through dark:text-gray-500">
                             ₹{priceDisplay.price}
                           </span>
-                          <span className="text-sm font-semibold text-primary">
+                          <span className="text-sm font-semibold text-[var(--primary-dark)]">
                             ₹{priceDisplay.offerPrice}
                           </span>
                         </>
@@ -286,7 +290,7 @@ export default function AdminProducts() {
                     <button
                       type="button"
                       onClick={() => navigate(`/admin/products/${product.id}`)}
-                      className="rounded-lg p-2 text-blue-500 transition-colors hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      className="rounded-lg p-2 text-[var(--primary-dark)] transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/20"
                       aria-label="Edit product"
                     >
                       <Pencil className="h-4 w-4" />
@@ -332,7 +336,7 @@ export default function AdminProducts() {
                           onClick={() => goToPage(page)}
                           className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
                             page === currentPage
-                              ? "border-primary bg-primary text-white"
+                              ? "border-[var(--primary-dark)] bg-[var(--primary-dark)] text-white"
                               : ""
                           }`}
                           style={

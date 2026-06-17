@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { db } from '../../firebase/firebase';
 import { uploadBannerToCloudinary, uploadImageToCloudinary } from '../../utils/cloudinary';
 
-const inputClass = "w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-white";
+const inputClass = "w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-600 dark:bg-gray-700 dark:text-white";
 const labelClass = "mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300";
 
 function Section({ title, icon: Icon, children, delay = 0 }) {
@@ -219,7 +219,7 @@ export default function AdminSettings() {
                 {logoPreview || logoUrl ? (
                   <img src={logoPreview || logoUrl} alt="Logo" className="h-full w-full object-cover" />
                 ) : (
-                  <span className="text-2xl font-bold text-primary">
+                  <span className="text-2xl font-bold text-[var(--primary-dark)]">
                     {logoText || storeName.charAt(0) || 'Y'}
                   </span>
                 )}
@@ -228,7 +228,7 @@ export default function AdminSettings() {
                 <button
                   type="button"
                   onClick={() => logoFileRef.current?.click()}
-                  className="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:border-primary hover:text-primary dark:border-gray-600 dark:text-gray-300 transition-colors"
+                  className="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:border-[var(--primary-dark)] hover:text-[var(--primary-dark)] dark:border-gray-600 dark:text-gray-300 transition-colors"
                 >
                   <ImagePlus className="h-4 w-4" />
                   Upload Logo Image
@@ -304,7 +304,7 @@ export default function AdminSettings() {
               <label className="flex items-center gap-3 cursor-pointer">
                 <div
                   onClick={() => setHasPhysicalStore((p) => !p)}
-                  className={`relative h-6 w-11 rounded-full transition-colors ${hasPhysicalStore ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'}`}
+                  className={`relative h-6 w-11 rounded-full transition-colors ${hasPhysicalStore ? 'bg-[var(--primary-dark)]' : 'bg-gray-300 dark:bg-gray-600'}`}
                 >
                   <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${hasPhysicalStore ? 'translate-x-5' : 'translate-x-0.5'}`} />
                 </div>
@@ -365,7 +365,7 @@ export default function AdminSettings() {
           <motion.button
             type="submit" disabled={saving}
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-            className="w-full rounded-xl bg-primary py-3 font-semibold text-white disabled:opacity-70"
+            className="w-full rounded-xl bg-[var(--primary-dark)] py-3 font-semibold text-white disabled:opacity-70"
           >
             {saving ? 'Saving...' : 'Save All Settings'}
           </motion.button>
@@ -394,7 +394,7 @@ export default function AdminSettings() {
 
         <form onSubmit={handleAddBanner} className="space-y-4">
           <button type="button" onClick={() => bannerFileRef.current?.click()}
-            className="w-full rounded-2xl border-2 border-dashed border-gray-200 p-6 text-center transition-colors hover:border-primary dark:border-gray-600">
+            className="w-full rounded-2xl border-2 border-dashed border-gray-200 p-6 text-center transition-colors hover:border-[var(--primary-dark)] dark:border-gray-600">
             {bannerPreview ? (
               <img src={bannerPreview} alt="Preview" className="mx-auto h-32 max-w-full rounded-xl object-cover" />
             ) : (
@@ -420,7 +420,7 @@ export default function AdminSettings() {
           {bannerSaving && bannerUploadProgress > 0 && (
             <div>
               <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
-                <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${bannerUploadProgress}%` }} />
+                <div className="h-full rounded-full bg-[var(--primary-dark)] transition-all duration-300" style={{ width: `${bannerUploadProgress}%` }} />
               </div>
               <p className="mt-1 text-center text-xs text-gray-500">Uploading... {Math.round(bannerUploadProgress)}%</p>
             </div>
@@ -428,7 +428,7 @@ export default function AdminSettings() {
 
           <motion.button type="submit" disabled={bannerSaving}
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-            className="w-full rounded-xl bg-primary py-3 font-semibold text-white disabled:opacity-70">
+            className="w-full rounded-xl bg-[var(--primary-dark)] py-3 font-semibold text-white disabled:opacity-70">
             {bannerSaving ? 'Uploading...' : 'Add Banner'}
           </motion.button>
         </form>

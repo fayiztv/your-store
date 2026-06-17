@@ -16,7 +16,7 @@ function genId() {
   return Math.random().toString(36).slice(2, 8);
 }
 
-const inputClass = "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500";
+const inputClass = "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500";
 
 export default function AdminProductForm() {
   const { id } = useParams();
@@ -321,8 +321,8 @@ export default function AdminProductForm() {
               onClick={() => setPricingMode(mode)}
               className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${
                 pricingMode === mode
-                  ? 'bg-primary text-white'
-                  : 'border border-gray-200 text-gray-600 hover:border-primary dark:border-gray-700 dark:text-gray-400'
+                  ? 'bg-[var(--primary-dark)] text-white'
+                  : 'border border-gray-200 text-gray-600 hover:border-[var(--primary-dark)] dark:border-gray-700 dark:text-gray-400'
               }`}
             >
               {mode === 'simple' ? '₹ Simple Price' : '⚙ Variants (sizes / colors)'}
@@ -363,8 +363,8 @@ export default function AdminProductForm() {
                     onClick={() => setVariantType(opt.value)}
                     className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
                       variantType === opt.value
-                        ? 'bg-primary text-white'
-                        : 'border border-gray-200 text-gray-600 hover:border-primary dark:border-gray-700 dark:text-gray-400'
+                        ? 'bg-[var(--primary-dark)] text-white'
+                        : 'border border-gray-200 text-gray-600 hover:border-[var(--primary-dark)] dark:border-gray-700 dark:text-gray-400'
                     }`}
                   >
                     {opt.label}
@@ -404,7 +404,7 @@ export default function AdminProductForm() {
                         </p>
                       </div>
                       <button type="button" onClick={() => toggleVariantStock(v.id)}
-                        className="text-xs text-gray-400 hover:text-primary px-2">
+                        className="text-xs text-gray-400 hover:text-[var(--primary-dark)] px-2">
                         Toggle Stock
                       </button>
                       <button type="button" onClick={() => removeVariant(v.id)}
@@ -455,13 +455,13 @@ export default function AdminProductForm() {
 
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={newVariantInStock} onChange={(e) => setNewVariantInStock(e.target.checked)}
-                  className="h-4 w-4 rounded accent-primary" />
+                  className="h-4 w-4 rounded accent-[var(--primary-dark)]" />
                 <span className="text-sm text-gray-700 dark:text-gray-300">In Stock</span>
               </label>
 
               <motion.button type="button" onClick={addVariant}
                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-primary py-2.5 text-sm font-semibold text-primary hover:bg-primary/5">
+                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[var(--primary-dark)] py-2.5 text-sm font-semibold text-[var(--primary-dark)] hover:bg-primary/5">
                 <Plus className="h-4 w-4" /> Add Variant
               </motion.button>
             </div>
@@ -473,7 +473,7 @@ export default function AdminProductForm() {
       <section className="mt-8 space-y-3">
         <h3 className="font-outfit text-sm font-semibold uppercase tracking-wide text-gray-400">Images</h3>
         <button type="button" onClick={() => fileInputRef.current?.click()} disabled={images.length >= 4}
-          className="w-full rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center transition-colors hover:border-primary hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800/50">
+          className="w-full rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center transition-colors hover:border-[var(--primary-dark)] hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800/50">
           <ImagePlus className="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600" />
           <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Click to upload images</p>
           <p className="mt-1 text-xs text-gray-400">Up to 4 images • Stored on Cloudinary</p>
@@ -499,7 +499,7 @@ export default function AdminProductForm() {
       {uploading && uploadProgress > 0 && (
         <div className="mt-4">
           <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
-            <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+            <div className="h-full rounded-full bg-[var(--primary-dark)] transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
           </div>
           <p className="mt-1 text-center text-xs text-gray-500">Uploading... {Math.round(uploadProgress)}%</p>
         </div>
@@ -507,7 +507,7 @@ export default function AdminProductForm() {
 
       <motion.button type="submit" disabled={isBusy}
         whileHover={!isBusy ? { scale: 1.02 } : {}} whileTap={!isBusy ? { scale: 0.98 } : {}}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary-dark)] py-4 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
         {saving || uploading ? (
           <><span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> Saving...</>
         ) : "Save Product"}

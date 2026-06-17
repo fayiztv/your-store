@@ -11,7 +11,7 @@ export function AdminProductFormToggle({ enabled, onChange, label, icon: Icon })
       </span>
       <span
         className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ${
-          enabled ? "bg-primary" : "bg-gray-300"
+          enabled ? "bg-[var(--primary-dark)]" : "bg-gray-300"
         }`}
       >
         <span

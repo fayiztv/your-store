@@ -24,7 +24,7 @@ export default function NavItems({ pathname, onNavigate }) {
             onClick={() => handleNav(to)}
             className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
               active
-                ? "bg-primary text-white"
+                ? "bg-[var(--primary-dark)] text-white"
                 : "text-gray-400 hover:bg-gray-800 hover:text-white"
             }`}
           >

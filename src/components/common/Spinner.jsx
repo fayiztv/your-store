@@ -5,7 +5,7 @@ export default function FullScreenSpinner() {
       style={{ backgroundColor: "var(--bg)" }}
     >
       <div
-        className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"
+        className="h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent"
         role="status"
         aria-label="Loading"
       />
