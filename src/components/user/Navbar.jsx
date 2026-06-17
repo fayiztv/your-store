@@ -6,7 +6,7 @@ import { useFavourites } from "../../contexts/FavouritesContext";
 import { useStoreSettings } from "../../contexts/SettingsContext";
 import { Logo } from "../common/Logo";
 import { ThemeToggle } from "../common/ThemeToggle";
-import { userNavLinks } from "../../utils/constents";
+import { CSS_VARS, userNavLinks } from "../../utils/constents";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -60,24 +60,37 @@ export default function Navbar() {
             <Logo onClick={() => navigate("/")} light={false} />
 
             <nav className="hidden items-center gap-6 md:flex">
-              {userNavLinks.map(({ to, label }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  className={`text-sm font-medium transition-colors ${
-                    isActive(to)
-                      ? "font-semibold text-primary underline decoration-primary decoration-2 underline-offset-4"
-                      : "text-[var(--text-secondary)] hover:text-primary"
-                  }`}
-                >
-                  {label}
-                </Link>
-              ))}
+              {userNavLinks.map(
+                ({ to, label }) =>
+                  label != "Favourites" && (
+                    <Link
+                      key={to}
+                      to={to}
+                      className={`text-sm font-medium transition-colors ${
+                        isActive(to)
+                          ? "font-semibold underline decoration-2 underline-offset-4"
+                          : "text-[var(--text-secondary)] hover:text-[var(--primary-dark)]"
+                      }`}
+                      style={
+                        isActive(to)
+                          ? {
+                              color: CSS_VARS.primary,
+                              textDecorationColor: CSS_VARS.primary,
+                            }
+                          : {
+                              undefined,
+                            }
+                      }
+                    >
+                      {label}
+                    </Link>
+                  ),
+              )}
               {instagramUrl && (
                 <button
                   type="button"
                   onClick={openInstagram}
-                  className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-primary"
+                  className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
                 >
                   Instagram
                 </button>
@@ -85,7 +98,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={openWhatsApp}
-                className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-primary"
+                className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
               >
                 Contact
               </button>
@@ -183,7 +196,7 @@ export default function Navbar() {
             >
               <div
                 className="flex items-center justify-between border-b p-4"
-                style={{ borderColor: "var(--border)" }}
+                style={{ borderColor: "#2D2D2D" }}
               >
                 <Logo
                   onClick={() => {
@@ -213,10 +226,15 @@ export default function Navbar() {
                     }}
                     className={`flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium transition-colors ${
                       isActive(to)
-                        ? "bg-primary text-gray"
+                        ? "text-white"
                         : "text-gray-400 hover:bg-gray-800 hover:text-white"
                     }`}
-                    style={{ borderColor: "var(--border)" }}
+                    style={
+                      isActive(to)
+                        ? { backgroundColor: CSS_VARS.primary }
+                        : undefined
+                    }
+                    // style={{ borderColor: "var(--border)" }}
                   >
                     <Icon className="h-5 w-5" />
                     {label}
@@ -234,7 +252,7 @@ export default function Navbar() {
                     openWhatsApp();
                     setMobileOpen(false);
                   }}
-                  className="flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+                  className="flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
                 >
                   <MessageCircle className="h-5 w-5" />
                   WhatsApp
@@ -247,7 +265,7 @@ export default function Navbar() {
                       openInstagram();
                       setMobileOpen(false);
                     }}
-                    className="flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+                    className="flex w-full items-center gap-4 rounded-xl px-5 py-3 text-sm font-medium text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
                   >
                     <MessageCircle className="h-5 w-5" />
                     Instagram
@@ -255,10 +273,7 @@ export default function Navbar() {
                 )}
               </nav>
 
-              <div
-                className="border-t p-4"
-                style={{ borderColor: "var(--border)" }}
-              >
+              <div className="border-t p-4" style={{ borderColor: "#2D2D2D" }}>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">Dark Mode</span>
                   <ThemeToggle light />

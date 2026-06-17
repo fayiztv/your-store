@@ -11,6 +11,7 @@ import {
 import { useFavourites } from "../../contexts/FavouritesContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useStoreSettings } from "../../contexts/SettingsContext";
+import { CSS_VARS } from "../../utils/constents";
 
 const navItems = [
   { label: "Home", icon: Home, path: "/" },
@@ -63,13 +64,14 @@ export default function BottomNav() {
               }
             }}
             className="relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2"
-            style={{ color: isActive ? "#1A8FE3" : "var(--text-secondary)" }}
+            style={{ color: isActive ? CSS_VARS.primary : CSS_VARS.textSecondary }}
           >
             {/* Active indicator dot */}
             {isActive && (
               <motion.div
                 layoutId="bottomNavIndicator"
-                className="absolute -top-px h-0.5 w-8 rounded-full bg-primary"
+                className="absolute -top-px h-0.5 w-8 rounded-full"
+                style={{ backgroundColor: CSS_VARS.primary }}
               />
             )}
 

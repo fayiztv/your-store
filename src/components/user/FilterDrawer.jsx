@@ -83,7 +83,7 @@ export default function FilterDrawer({
                           onClick={() => onCategoryChange(pill)}
                           className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                             activeCategory === pill
-                              ? "bg-primary text-white"
+                              ? "bg-[var(--primary-dark)] text-white"
                               : "border text-[var(--text-secondary)]"
                           }`}
                           style={
@@ -104,7 +104,7 @@ export default function FilterDrawer({
                       placeholder="Min ₹"
                       value={minPrice}
                       onChange={(e) => onMinPriceChange(e.target.value)}
-                      className="w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full rounded-xl border px-3 py-2 text-sm outline-none"
                       style={{
                         borderColor: "var(--border)",
                         backgroundColor: "var(--surface)",
@@ -116,7 +116,7 @@ export default function FilterDrawer({
                       placeholder="Max ₹"
                       value={maxPrice}
                       onChange={(e) => onMaxPriceChange(e.target.value)}
-                      className="w-full rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full rounded-xl border px-3 py-2 text-sm outline-none"
                       style={{
                         borderColor: "var(--border)",
                         backgroundColor: "var(--surface)",
@@ -128,7 +128,7 @@ export default function FilterDrawer({
                   <select
                     value={sortBy}
                     onChange={(e) => onSortChange(e.target.value)}
-                    className="w-full cursor-pointer rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full cursor-pointer rounded-xl border px-3 py-2 text-sm outline-none"
                     style={{
                       borderColor: "var(--border)",
                       backgroundColor: "var(--surface)",
@@ -148,7 +148,7 @@ export default function FilterDrawer({
                       className="flex-1 rounded-xl border py-2.5 text-sm font-medium"
                       style={{
                         borderColor: "var(--border)",
-                        color: "var(--text-secondary)",
+                        color: "var(--text-primary)",
                       }}
                     >
                       Clear
@@ -156,7 +156,7 @@ export default function FilterDrawer({
                     <button
                       type="button"
                       onClick={() => onClose(false)}
-                      className="flex-1 rounded-xl bg-primary py-2.5 text-sm font-semibold text-white"
+                      className="flex-1 rounded-xl bg-[var(--primary-dark)] py-2.5 text-sm font-semibold text-white"
                     >
                       Apply
                     </button>

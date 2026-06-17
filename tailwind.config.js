@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#1A8FE3',
-        'primary-dark': '#1060A8',
+        primary: 'var(--primary)',
+        'primary-dark': 'var(--primary-dark)',
         surface: '#FFFFFF',
         accent: '#111111',
         whatsapp: '#25D366',

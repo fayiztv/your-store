@@ -83,7 +83,7 @@ export default function Favourites() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate("/products")}
-                className="mt-8 rounded-xl bg-primary px-8 py-3 text-sm font-semibold text-white shadow-md shadow-primary/30 transition-colors hover:bg-primary-dark"
+                className="mt-8 rounded-xl bg-[var(--primary-dark)] px-8 py-3 text-sm font-semibold text-white shadow-md shadow-primary/30 transition-colors"
               >
                 Browse Products
               </motion.button>

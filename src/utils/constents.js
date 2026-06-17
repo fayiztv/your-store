@@ -97,3 +97,16 @@ export const cardVariantsHome = {
 export const THEME_KEY = 'store_theme';
 
 export const PER_PAGE = 6;
+
+// CSS variable references
+export const CSS_VARS = {
+  primary: 'var(--primary)',
+  primaryDark: 'var(--primary-dark)',
+  textPrimary: 'var(--text-primary)',
+  textSecondary: 'var(--text-secondary)',
+  surface: 'var(--surface)',
+  border: 'var(--border)',
+  bg: 'var(--bg)',
+  cardBg: 'var(--card-bg)',
+  navbarBg: 'var(--navbar-bg)',
+};

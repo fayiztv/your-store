@@ -225,7 +225,7 @@ export default function ProductDetail() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleFavouriteToggle}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-primary bg-[var(--surface)] py-4 text-base font-semibold text-primary hover:bg-primary/5"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[var(--primary-dark)] bg-[var(--surface)] py-4 text-base font-semibold text-[var(--primary-dark)] hover:bg-primary/5"
         >
           <Heart className={`h-5 w-5 ${favourited ? "fill-red-500 text-red-500" : ""}`} />
           {favourited ? "Remove from Favourites" : "Add to Favourites"}
@@ -254,7 +254,7 @@ export default function ProductDetail() {
             </p>
             <motion.button type="button" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               onClick={() => navigate(-1)}
-              className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/30">
+              className="mt-6 flex items-center gap-2 rounded-xl bg-[var(--primary-dark)] px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/30">
               <ChevronLeft className="h-4 w-4" /> Go Back
             </motion.button>
           </div>
@@ -269,7 +269,7 @@ export default function ProductDetail() {
                   <ChevronLeft className="h-4 w-4" /> Back
                 </button>
 
-                <span className="mb-3 w-fit rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <span className="mb-3 w-fit rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary-dark)]">
                   {categoryLabel}
                 </span>
 
@@ -279,11 +279,11 @@ export default function ProductDetail() {
 
                 <div className="mt-4 flex flex-wrap items-end gap-3">
                   {displayPrice?.isRange ? (
-                    <span className="font-outfit text-2xl font-bold text-primary">{displayPrice.rangeText}</span>
+                    <span className="font-outfit text-2xl font-bold text-[var(--primary-dark)]">{displayPrice.rangeText}</span>
                   ) : displayPrice?.hasOffer ? (
                     <>
                       <span className="text-base text-[var(--text-secondary)] line-through">₹{displayPrice.price}</span>
-                      <span className="font-outfit text-3xl font-bold text-primary">₹{displayPrice.offerPrice}</span>
+                      <span className="font-outfit text-3xl font-bold text-[var(--primary-dark)]">₹{displayPrice.offerPrice}</span>
                       {savings && (
                         <span className="rounded-full bg-green-500/20 px-2.5 py-1 text-xs font-semibold text-green-400">
                           You save ₹{savings}
@@ -291,7 +291,7 @@ export default function ProductDetail() {
                       )}
                     </>
                   ) : (
-                    <span className="font-outfit text-3xl font-bold text-[var(--text-primary)]">
+                    <span className="font-outfit text-3xl font-bold text-[var(--primary-dark)]">
                       ₹{displayPrice?.price ?? "—"}
                     </span>
                   )}
@@ -329,7 +329,7 @@ export default function ProductDetail() {
                                 onClick={() => !oos && setSelectedLabel(label)}
                                 className={`rounded-xl border px-4 py-2 text-sm font-medium transition-all
                                   ${oos ? 'cursor-not-allowed opacity-40 line-through' : 'cursor-pointer'}
-                                  ${isSelected ? 'border-primary bg-primary text-white' : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-primary'}`}>
+                                  ${isSelected ? 'border-[var(--primary-dark)] bg-[var(--primary-dark)] text-white' : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-[var(--primary-dark)]'}`}>
                                 {label}
                                 {v?.offerPrice ? <span className="ml-1.5 text-xs opacity-80">₹{v.offerPrice}</span>
                                   : v?.price ? <span className="ml-1.5 text-xs opacity-80">₹{v.price}</span> : null}
@@ -354,7 +354,7 @@ export default function ProductDetail() {
                                 onClick={() => { setSelectedColor(color); setSelectedSize(null); }}
                                 title={color}
                                 className={`relative h-9 w-9 rounded-full transition-all ${
-                                  isSelected ? 'ring-2 ring-primary ring-offset-2 ring-offset-[var(--surface)] scale-110' : 'ring-1 ring-gray-200 hover:scale-105'
+                                  isSelected ? 'ring-2 ring-[var(--primary-dark)] ring-offset-2 ring-offset-[var(--surface)] scale-110' : 'ring-1 ring-gray-200 hover:scale-105'
                                 }`}
                                 style={{ backgroundColor: colorHex }}>
                                 {isSelected && (
@@ -384,7 +384,7 @@ export default function ProductDetail() {
                                   onClick={() => !oos && setSelectedSize(size)}
                                   className={`rounded-xl border px-4 py-2 text-sm font-medium transition-all
                                     ${oos ? 'cursor-not-allowed opacity-40 line-through' : 'cursor-pointer'}
-                                    ${isSelected ? 'border-primary bg-primary text-white' : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-primary'}`}>
+                                    ${isSelected ? 'border-[var(--primary-dark)] bg-[var(--primary-dark)] text-white' : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-[var(--primary-dark)]'}`}>
                                   {size}
                                 </motion.button>
                               );
@@ -404,10 +404,10 @@ export default function ProductDetail() {
                             {selectedVariant.offerPrice ? (
                               <>
                                 <span className="text-sm text-[var(--text-secondary)] line-through">₹{selectedVariant.price}</span>
-                                <span className="font-outfit text-xl font-bold text-primary">₹{selectedVariant.offerPrice}</span>
+                                <span className="font-outfit text-xl font-bold text-[var(--primary-dark)]">₹{selectedVariant.offerPrice}</span>
                               </>
                             ) : (
-                              <span className="font-outfit text-xl font-bold text-[var(--text-primary)]">₹{selectedVariant.price}</span>
+                              <span className="font-outfit text-xl font-bold text-[var(--primary-dark)]">₹{selectedVariant.price}</span>
                             )}
                           </div>
                         </motion.div>
@@ -470,7 +470,7 @@ export default function ProductDetail() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={handleFavouriteToggle}
-                        className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-primary bg-[var(--surface)] py-3.5 text-base font-semibold text-primary"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[var(--primary-dark)] bg-[var(--surface)] py-3.5 text-base font-semibold text-[var(--primary-dark)]"
                       >
                         <Heart className={`h-5 w-5 ${favourited ? "fill-red-500 text-red-500" : ""}`} />
                         {favourited ? "Remove from Favourites" : "Add to Favourites"}
@@ -513,10 +513,10 @@ export default function ProductDetail() {
                       whileTap={{ scale: 0.9 }}
                       whileHover={{ scale: 1.05 }}
                       onClick={handleFavouriteToggle}
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-primary bg-[var(--surface)] shadow-lg"
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-[var(--primary-dark)] bg-[var(--surface)] shadow-lg"
                       aria-label="Toggle favourites"
                     >
-                      <Heart className={`h-5 w-5 ${favourited ? "fill-red-500 text-red-500" : "text-primary"}`} />
+                      <Heart className={`h-5 w-5 ${favourited ? "fill-red-500 text-red-500" : "text-[var(--primary-dark)]"}`} />
                     </motion.button>
 
                     {/* Expand button */}

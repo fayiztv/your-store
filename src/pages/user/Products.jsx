@@ -192,7 +192,7 @@ export default function Products() {
               setSearchParams(params);
             }}
             placeholder="Search products..."
-            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 md:max-w-md"
+            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all primary focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 md:max-w-md"
             style={{
               borderColor: "var(--border)",
               backgroundColor: "var(--card-bg)",
@@ -212,8 +212,8 @@ export default function Products() {
                 onClick={() => setCategoryByName(pill)}
                 className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all ${
                   activeCategory === pill
-                    ? "bg-primary text-white shadow-md shadow-primary/25"
-                    : "border text-[var(--text-secondary)] hover:border-primary/30 hover:text-primary"
+                    ? "bg-[var(--primary-dark)] text-white shadow-md shadow-primary/25"
+                    : "border text-[var(--text-secondary)] hover:border-primary/30 hover:text-[var(--primary-dark)]"
                 }`}
                 style={
                   activeCategory !== pill
@@ -235,7 +235,7 @@ export default function Products() {
               placeholder="Min ₹"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-24 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+              className="w-24 rounded-xl border px-3 py-2 text-sm outline-none"
               style={{
                 borderColor: "var(--border)",
                 backgroundColor: "var(--card-bg)",
@@ -247,7 +247,7 @@ export default function Products() {
               placeholder="Max ₹"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-24 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+              className="w-24 rounded-xl border px-3 py-2 text-sm outline-none"
               style={{
                 borderColor: "var(--border)",
                 backgroundColor: "var(--card-bg)",
@@ -259,7 +259,7 @@ export default function Products() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="shrink-0 cursor-pointer rounded-xl border px-3 py-2 text-sm font-medium outline-none focus:ring-2 focus:ring-primary"
+            className="shrink-0 cursor-pointer rounded-xl border px-3 py-2 text-sm font-medium outline-none"
             style={{
               borderColor: "var(--border)",
               backgroundColor: "var(--card-bg)",
@@ -296,7 +296,7 @@ export default function Products() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={clearFilters}
-              className="mt-6 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/30"
+              className="mt-6 rounded-xl bg-[var(--primary-dark)] px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/30"
             >
               Clear Filters
             </motion.button>
@@ -348,7 +348,7 @@ export default function Products() {
                     onClick={() => goToPage(page)}
                     className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
                       page === currentPage
-                        ? "border-primary bg-primary text-white"
+                        ? "border-[var(--primary-dark)] bg-[var(--primary-dark)] text-white"
                         : ""
                     }`}
                     style={

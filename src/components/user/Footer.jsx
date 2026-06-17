@@ -55,7 +55,7 @@ export default function Footer() {
                     href={mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-start gap-2 text-xs text-[var(--text-secondary)] hover:text-primary transition-colors"
+                    className="flex items-start gap-2 text-xs text-[var(--text-secondary)] hover:text-[var(--primary-dark)] transition-colors"
                   >
                     <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                     {address}
@@ -90,7 +90,7 @@ export default function Footer() {
                 <Link
                   key={to}
                   to={to}
-                  className="text-sm text-[var(--text-secondary)] transition-colors hover:text-primary"
+                  className="text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
                 >
                   {label}
                 </Link>
@@ -107,7 +107,7 @@ export default function Footer() {
                 <button
                   type="button"
                   onClick={openWhatsApp}
-                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-primary text-left"
+                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)] text-left"
                 >
                   <MessageCircle className="h-4 w-4 shrink-0" />
                   Chat on WhatsApp
@@ -115,7 +115,7 @@ export default function Footer() {
                 <button
                   type="button"
                   onClick={openInstagram}
-                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-primary text-left"
+                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)] text-left"
                 >
                   <span className="text-sm">@</span>
                   Instagram

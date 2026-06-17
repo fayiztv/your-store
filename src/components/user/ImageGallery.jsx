@@ -17,19 +17,19 @@ export default function ImageGallery({ images = [] }) {
   return (
     <div className="w-full">
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
-  <AnimatePresence mode="wait">
-    <motion.img
-      key={currentIndex}
-      src={galleryImages[currentIndex]}
-      alt={`Product view ${currentIndex + 1}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="h-full w-full object-contain"
-    />
-  </AnimatePresence>
-</div>
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentIndex}
+            src={galleryImages[currentIndex]}
+            alt={`Product view ${currentIndex + 1}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="h-full w-full object-contain"
+          />
+        </AnimatePresence>
+      </div>
 
       {galleryImages.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto hide-scrollbar">
@@ -40,7 +40,7 @@ export default function ImageGallery({ images = [] }) {
               onClick={() => setCurrentIndex(index)}
               className={`h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
                 currentIndex === index
-                  ? "border-primary ring-2 ring-primary/20"
+                  ? "border-[var(--primary-dark)] ring-2 ring-primary/20"
                   : "border-gray-200 opacity-70 hover:border-gray-300 hover:opacity-100"
               }`}
             >

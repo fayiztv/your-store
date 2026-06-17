@@ -63,7 +63,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
 
     if (hasVariants) {
       return (
-        <span className={`font-outfit font-bold text-primary ${bigClass}`}>
+        <span className={`font-outfit font-bold text-[var(--primary)] ${bigClass}`}>
           {priceRange}
         </span>
       );
@@ -76,7 +76,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
           >
             ₹{product.price}
           </span>
-          <span className={`font-outfit font-bold text-primary ${bigClass}`}>
+          <span className={`font-outfit font-bold text-[var(--primary)] ${bigClass}`}>
             ₹{product.offerPrice}
           </span>
         </div>
@@ -101,7 +101,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
         onClick={handleCardClick}
         className="flex min-h-[110px] w-full cursor-pointer flex-row overflow-hidden rounded-2xl bg-[var(--card-bg)] shadow-sm"
       >
-        <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-l-3xl">
+        <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-l-2xl">
           {product.images?.[0] ? (
             <img
               src={product.images[0]}
@@ -117,7 +117,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
             </div>
           )}
           {product.isFeatured && (
-            <span className="absolute left-1.5 top-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-white">
+            <span className="absolute left-1.5 top-1.5 rounded-2xl bg-[var(--primary-dark)] px-2 py-0.5 text-[10px] font-semibold text-white dark:bg-[var(--primary)]">
               Featured
             </span>
           )}
@@ -135,7 +135,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
             <h3 className="line-clamp-2 font-outfit text-sm font-semibold text-[var(--text-primary)]">
               {product.name}
             </h3>
-            <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+            <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
               {categoryLabel}
             </span>
 
@@ -207,7 +207,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
           </div>
         )}
         {product.isFeatured && (
-          <span className="absolute left-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-white">
+          <span className="absolute left-3 top-2 rounded-2xl bg-[var(--primary-dark)] px-2.5 py-0.5 text-xs font-semibold text-white dark:bg-[var(--primary)]">
             Featured
           </span>
         )}
@@ -225,7 +225,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
           <h3 className="line-clamp-1 font-outfit text-base font-semibold text-[var(--text-primary)]">
             {product.name}
           </h3>
-          <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+          <span className="mt-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
             {categoryLabel}
           </span>
 

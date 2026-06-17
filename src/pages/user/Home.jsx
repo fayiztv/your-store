@@ -235,7 +235,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => navigate("/products")}
-                  className="text-sm font-medium text-primary hover:underline"
+                  className="text-sm font-medium text-[var(--primary)] hover:underline"
                 >
                   View All →
                 </button>
