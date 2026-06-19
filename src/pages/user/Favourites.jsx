@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import toast from "react-hot-toast";
 import ProductCard from "../../components/user/ProductCard";
-import { useFavourites } from "../../contexts/FavouritesContext";
 import { useEffect, useState } from "react";
 import { containerVariantsFavorites } from "../../utils/constents";
+import { useFavourites } from "../../hooks/useFavorites";
 
 export default function Favourites() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);

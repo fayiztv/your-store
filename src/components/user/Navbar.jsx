@@ -2,11 +2,11 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Menu, MessageCircle, Search, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useFavourites } from "../../contexts/FavouritesContext";
 import { useStoreSettings } from "../../contexts/SettingsContext";
 import { Logo } from "../common/Logo";
 import { ThemeToggle } from "../common/ThemeToggle";
 import { CSS_VARS, userNavLinks } from "../../utils/constents";
+import { useFavourites } from "../../hooks/useFavorites";
 
 export default function Navbar() {
   const navigate = useNavigate();

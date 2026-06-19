@@ -1,13 +1,10 @@
-// import { createContext, useContext } from "react";
+import { useContext } from "react";
+import { FavouritesContext } from "../contexts/FavouritesContext";
 
-// const FavouritesContext = createContext(null);
-
-// export function useFavourites() {
-//   const context = useContext(FavouritesContext);
-//   console.log("hellooo", context);
-  
-//   if (!context) {
-//     throw new Error('useFavourites must be used within a FavouritesProvider');
-//   }
-//   return context;
-// }
+export function useFavourites() {
+  const context = useContext(FavouritesContext);
+  if (!context) {
+    throw new Error('useFavourites must be used within a FavouritesProvider');
+  }
+  return context;
+}

@@ -8,10 +8,10 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
-import { useFavourites } from "../../contexts/FavouritesContext";
-import { useTheme } from "../../contexts/ThemeContext";
 import { useStoreSettings } from "../../contexts/SettingsContext";
 import { CSS_VARS } from "../../utils/constents";
+import { useFavourites } from "../../hooks/useFavorites";
+import { useTheme } from "../../hooks/useTheme";
 
 const navItems = [
   { label: "Home", icon: Home, path: "/" },

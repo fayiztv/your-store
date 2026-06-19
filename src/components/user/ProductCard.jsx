@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Heart, Shirt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useFavourites } from "../../contexts/FavouritesContext";
 import { cardVariants } from "../../utils/constents";
+import { useFavourites } from "../../hooks/useFavorites";
 
 // Helper: get price range string from variants
 function getVariantPriceRange(variants) {

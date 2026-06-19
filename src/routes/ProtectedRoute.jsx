@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import FullScreenSpinner from "../components/common/Spinner";
+import { useAuth } from "../hooks/useAuth";
 
 function ProtectedRoute({ children }) {
   const { currentUser, loading } = useAuth();

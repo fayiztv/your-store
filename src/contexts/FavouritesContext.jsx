@@ -1,15 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { getFavourites, saveFavourites } from '../utils/localStorage';
 
-const FavouritesContext = createContext(null);
-
-export function useFavourites() {
-  const context = useContext(FavouritesContext);
-  if (!context) {
-    throw new Error('useFavourites must be used within a FavouritesProvider');
-  }
-  return context;
-}
+export const FavouritesContext = createContext(null);
 
 export function FavouritesProvider({ children }) {
   const [favourites, setFavourites] = useState(() => getFavourites());

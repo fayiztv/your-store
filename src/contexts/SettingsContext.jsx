@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect } from "react";
 import useSettings from "../hooks/useSettings";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../hooks/useTheme";
 
-const SettingsContext = createContext(null);
+export const SettingsContext = createContext(null);
 
 export function useStoreSettings() {
   const context = useContext(SettingsContext);

@@ -9,11 +9,11 @@ import toast from "react-hot-toast";
 import ImageGallery from "../../components/user/ImageGallery";
 import ProductCard from "../../components/user/ProductCard";
 import { db } from "../../firebase/firebase";
-import { useFavourites } from "../../contexts/FavouritesContext";
 import { useStoreSettings } from "../../contexts/SettingsContext";
 import { openWhatsApp } from "../../utils/whatsapp";
 import { ProductDetailSkeleton } from "../../components/common/ProductDetailSkeleton";
 import { containerVariantsProductDetails } from "../../utils/constents";
+import { useFavourites } from "../../hooks/useFavorites";
 
 export default function ProductDetail() {
   const { id: productId } = useParams();
