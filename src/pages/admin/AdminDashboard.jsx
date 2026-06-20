@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
-import { db } from '../../firebase/firebase';
-import { statConfig } from '../../utils/constents';
-import { SectionHeading } from '../../components/common/sectionHeading';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import { statConfig } from "../../utils/constents";
+import { SectionHeading } from "../../components/common/sectionHeading";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -26,10 +21,17 @@ export default function AdminDashboard() {
       try {
         const [productsSnap, categoriesSnap, featuredSnap, outOfStockSnap] =
           await Promise.all([
-            getDocs(collection(db, 'products')),
-            getDocs(collection(db, 'categories')),
-            getDocs(query(collection(db, 'products'), where('isFeatured', '==', true))),
-            getDocs(query(collection(db, 'products'), where('inStock', '==', false))),
+            getDocs(collection(db, "products")),
+            getDocs(collection(db, "categories")),
+            getDocs(
+              query(
+                collection(db, "products"),
+                where("isFeatured", "==", true),
+              ),
+            ),
+            getDocs(
+              query(collection(db, "products"), where("inStock", "==", false)),
+            ),
           ]);
 
         setStats({
@@ -55,10 +57,8 @@ export default function AdminDashboard() {
 
   return (
     <div>
-    <h2 className="mb-4 font-outfit text-lg font-semibold text-gray-900 dark:text-white">
-        <SectionHeading>Dashboard</SectionHeading>
-      </h2>
-      <div className="grid grid-cols-2 gap-4 mt-5 lg:grid-cols-4">
+      <SectionHeading>Dashboard</SectionHeading>
+      <div className="grid grid-cols-2 gap-4 mt-5 lg:grid-cols-4 mb-5">
         {statConfig.map((item, index) => {
           const Icon = item.icon;
           return (
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
                 <Icon className={`h-6 w-6 ${item.text}`} />
               </div>
               <p className="font-outfit text-3xl font-bold text-gray-900 dark:text-white">
-                {loading ? '—' : stats[item.key]}
+                {loading ? "—" : stats[item.key]}
               </p>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {item.label}
@@ -85,15 +85,13 @@ export default function AdminDashboard() {
         })}
       </div>
 
-      <h2 className="mb-4 mt-8 font-outfit text-lg font-semibold text-gray-900 dark:text-white">
-        <SectionHeading>Quick Actions</SectionHeading>
-      </h2>
-      <div className="flex flex-col gap-4">
+      <SectionHeading>Quick Actions</SectionHeading>
+      <div className="flex flex-col gap-4 md:flex-row">
         <motion.button
           type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => navigate('/admin/products/new')}
+          onClick={() => navigate("/admin/products/new")}
           className="rounded-xl bg-[var(--primary-dark)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark"
         >
           Add New Product
@@ -102,7 +100,7 @@ export default function AdminDashboard() {
           type="button"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => navigate('/admin/categories')}
+          onClick={() => navigate("/admin/categories")}
           className="rounded-xl border border-[var(--primary-dark)] px-6 py-3 text-sm font-semibold text-[var(--primary-dark)] transition-colors hover:bg-primary/5"
         >
           Manage Categories

@@ -10,6 +10,7 @@ import { db } from "../../firebase/firebase";
 import { uploadImageToCloudinary } from "../../utils/cloudinary";
 import useCategories from "../../hooks/useCategories";
 import { AdminProductFormToggle } from "../../components/admin/AdminProductFormToggle";
+import { SectionHeading } from "../../components/common/sectionHeading";
 
 // Generates a simple unique id for variants
 function genId() {
@@ -267,9 +268,8 @@ export default function AdminProductForm() {
           className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
-        <h2 className="font-outfit text-xl font-bold text-gray-900 dark:text-white">
-          {isEdit ? "Edit Product" : "Add Product"}
-        </h2>
+          
+          <SectionHeading>{isEdit ? "Edit Product" : "Add Product"}</SectionHeading>
       </div>
 
       {/* ── BASIC INFO ── */}

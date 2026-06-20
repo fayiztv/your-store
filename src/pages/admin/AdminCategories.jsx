@@ -16,7 +16,11 @@ import toast from "react-hot-toast";
 import GlassCard from "../../components/common/GlassCard";
 import useCategories from "../../hooks/useCategories";
 import { db } from "../../firebase/firebase";
-import { cardVariantsAdminCategory, containerVariantsAdminCategory } from "../../utils/constents";
+import {
+  cardVariantsAdminCategory,
+  containerVariantsAdminCategory,
+} from "../../utils/constents";
+import { SectionHeading } from "../../components/common/sectionHeading";
 
 export default function AdminCategories() {
   const { categories } = useCategories();
@@ -94,9 +98,7 @@ export default function AdminCategories() {
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
-          Categories
-        </h2>
+        <SectionHeading>Categories</SectionHeading>
         <form onSubmit={handleAdd} className="flex gap-2">
           <input
             type="text"

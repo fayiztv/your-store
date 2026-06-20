@@ -14,6 +14,7 @@ import {
   productMatchesCategory,
 } from "../../utils/helpers";
 import { ProductGridSkeleton } from "../../components/user/ProductGridSkeleton";
+import { SectionHeading } from "../../components/common/sectionHeading";
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -153,9 +154,7 @@ export default function Products() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-outfit text-2xl font-bold text-[var(--text-primary)]">
-              All Products
-            </h1>
+              <SectionHeading>All Products</SectionHeading>
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
               {filteredProducts.length}{" "}
               {filteredProducts.length === 1 ? "product" : "products"}

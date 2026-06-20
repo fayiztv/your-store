@@ -109,12 +109,9 @@ export default function AdminProducts() {
   return (
     <div>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-4">
-        {/* <h2 className="font-outfit text-2xl font-bold text-gray-900 dark:text-white">
-          Products
-        </h2> */}
-        <h2 className="mt-4 font-outfit text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="mt-4">
         <SectionHeading>Products</SectionHeading>
-      </h2>
+      </div>
         <motion.button
           type="button"
           whileHover={{ scale: 1.02 }}

@@ -6,6 +6,7 @@ import ProductCard from "../../components/user/ProductCard";
 import { useEffect, useState } from "react";
 import { containerVariantsFavorites } from "../../utils/constents";
 import { useFavourites } from "../../hooks/useFavorites";
+import { SectionHeading } from "../../components/common/sectionHeading";
 
 export default function Favourites() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -36,9 +37,7 @@ export default function Favourites() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <h1 className="font-outfit text-2xl font-bold text-[var(--text-primary)]">
-              My Favourites
-            </h1>
+            <SectionHeading>My Favourites</SectionHeading>
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
               {favourites.length} {favourites.length === 1 ? "item" : "items"}
             </p>
