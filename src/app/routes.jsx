@@ -13,6 +13,7 @@ import AdminProductForm from "../pages/admin/AdminProductForm";
 import AdminCategories from "../pages/admin/AdminCategories";
 import AdminSettings from "../pages/admin/AdminSettings";
 import AdminLayout from "../layouts/AdminLayout";
+import NotFound from "../pages/common/NotFound";
 
 export default function AppRoutes() {
   return (
@@ -43,6 +44,10 @@ export default function AppRoutes() {
           <Route path="categories" element={<AdminCategories />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
+
+        {/* Catch-all — matches any undefined route, including /admin/* typos
+            and regular site typos.. */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
