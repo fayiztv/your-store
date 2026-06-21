@@ -25,6 +25,7 @@ export default function AppRoutes() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/favourites" element={<Favourites />} />
+          <Route path="/favorites" element={<Favourites />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />
