@@ -1,4 +1,4 @@
-import { ImagePlus, Store, Trash2 } from "lucide-react";
+import { ImagePlus, Pencil, Store, Trash2, X } from "lucide-react";
 import Section from "./Section";
 import { inputClass } from "./settingsStyles";
 import { motion } from "framer-motion";
@@ -20,7 +20,13 @@ export default function BannerSection({
   handleDeleteBanner,
   handleBannerFile,
   bannerFileRef,
+  editingBannerId,
+  handleStartEditBanner,
+  handleUpdateBanner,
+  handleCancelEditBanner,
 }) {
+  const isEditing = Boolean(editingBannerId);
+
   return (
     <Section
       title="Banner Management"
@@ -33,7 +39,11 @@ export default function BannerSection({
           {banners.map((banner) => (
             <div
               key={banner.id}
-              className="flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+              className={`flex items-center gap-4 rounded-xl border p-3 transition-colors ${
+                editingBannerId === banner.id
+                  ? "border-[var(--primary-dark)] bg-[var(--primary-dark)]/5"
+                  : "border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
+              }`}
             >
               <img
                 src={banner.imageUrl}
@@ -52,8 +62,17 @@ export default function BannerSection({
               </div>
               <button
                 type="button"
+                onClick={() => handleStartEditBanner(banner)}
+                className="rounded-lg p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                aria-label="Edit banner"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
                 onClick={() => handleDeleteBanner(banner)}
                 className="rounded-lg p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                aria-label="Delete banner"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -62,7 +81,26 @@ export default function BannerSection({
         </div>
       )}
 
-      <form onSubmit={handleAddBanner} className="space-y-4">
+      <form
+        onSubmit={isEditing ? handleUpdateBanner : handleAddBanner}
+        className="space-y-4"
+      >
+        {isEditing && (
+          <div className="flex items-center justify-between rounded-xl bg-[var(--primary-dark)]/10 px-4 py-2.5">
+            <p className="text-sm font-medium text-[var(--primary-dark)]">
+              Editing banner
+            </p>
+            <button
+              type="button"
+              onClick={handleCancelEditBanner}
+              className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+              Cancel
+            </button>
+          </div>
+        )}
+
         <button
           type="button"
           onClick={() => bannerFileRef.current?.click()}
@@ -83,6 +121,11 @@ export default function BannerSection({
             </>
           )}
         </button>
+        {isEditing && (
+          <p className="text-xs text-gray-400">
+            Leave the image as-is, or click above to replace it
+          </p>
+        )}
         <input
           ref={bannerFileRef}
           type="file"
@@ -140,15 +183,28 @@ export default function BannerSection({
           </div>
         )}
 
-        <motion.button
-          type="submit"
-          disabled={bannerSaving}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full rounded-xl bg-[var(--primary-dark)] py-3 font-semibold text-white disabled:opacity-70"
-        >
-          {bannerSaving ? "Uploading..." : "Add Banner"}
-        </motion.button>
+        <div className="flex gap-3">
+          {isEditing && (
+            <button
+              type="button"
+              onClick={handleCancelEditBanner}
+              className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              Cancel
+            </button>
+          )}
+          <motion.button
+            type="submit"
+            disabled={bannerSaving}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex-1 rounded-xl bg-[var(--primary-dark)] py-3 font-semibold text-white disabled:opacity-70"
+          >
+            {bannerSaving
+              ? isEditing ? "Updating..." : "Uploading..."
+              : isEditing ? "Update Banner" : "Add Banner"}
+          </motion.button>
+        </div>
       </form>
     </Section>
   );

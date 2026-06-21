@@ -13,6 +13,9 @@ export default function useBannerData() {
   const [bannerSaving, setBannerSaving] = useState(false);
   const [bannerUploadProgress, setBannerUploadProgress] = useState(0);
 
+  // ID of the banner currently being edited, or null when adding a new one
+  const [editingBannerId, setEditingBannerId] = useState(null);
+
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "banners"), (snap) => {
       setBanners(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
@@ -39,5 +42,7 @@ export default function useBannerData() {
     setBannerSaving,
     bannerUploadProgress,
     setBannerUploadProgress,
+    editingBannerId,
+    setEditingBannerId,
   };
 }
