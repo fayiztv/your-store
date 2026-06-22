@@ -234,8 +234,7 @@ export default function AdminProductForm() {
         toast.success("Product added");
       }
       navigate("/admin/products");
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to save product");
     } finally {
       setSaving(false);
