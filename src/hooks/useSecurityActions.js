@@ -21,6 +21,10 @@ export default function useSecurityActions(
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const isDemoSite =
+  window.location.hostname === "your-store-demo.vercel.app";
+  
   // ── Change email handler ──
   async function handleChangeEmail(e) {
     e.preventDefault();
@@ -36,6 +40,13 @@ export default function useSecurityActions(
       toast.error("This is already your current email");
       return;
     }
+
+    if (isDemoSite) {
+    toast.error(
+      "Nice try 😄. Demo account credentials can't be changed."
+    );
+    return;
+  }
 
     setEmailSaving(true);
     try {
@@ -78,6 +89,13 @@ export default function useSecurityActions(
       toast.error("New passwords do not match");
       return;
     }
+
+    if (isDemoSite) {
+    toast.error(
+      "Nice try 😄. Demo account credentials can't be changed."
+    );
+    return;
+  }
 
     setPasswordSaving(true);
     try {
