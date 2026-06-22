@@ -5,21 +5,24 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Logo } from "../../components/common/Logo";
 import { useAuth } from "../../hooks/useAuth";
 
-const inputClass = "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500";
+const inputClass =
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 outline-none transition-all focus:ring-2 focus:ring-[var(--primary-dark)] dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500";
 
 export default function AdminLogin() {
   const { currentUser, login, resetPassword } = useAuth();
   const navigate = useNavigate();
 
+  const isDemoSite = window.location.hostname === "your-store-demo.vercel.app";
+
   // Login form state
-  const [email, setEmail] = useState("admin@demo.com");
-  const [password, setPassword] = useState("demo@#pass");
+  const [email, setEmail] = useState(isDemoSite ? "tvfayiztv@gmail.com" : "");
+  const [password, setPassword] = useState(isDemoSite ? "111111" : "");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Forgot password view state
-  const [view, setView] = useState('login'); // 'login' | 'forgot'
+  const [view, setView] = useState("login"); // 'login' | 'forgot'
   const [resetEmail, setResetEmail] = useState("");
   const [resetSending, setResetSending] = useState(false);
   const [resetSent, setResetSent] = useState(false);
@@ -53,7 +56,7 @@ export default function AdminLogin() {
       setResetSent(true);
     } catch (err) {
       // Keep the message generic — don't reveal whether the email exists
-      if (err.code === 'auth/invalid-email') {
+      if (err.code === "auth/invalid-email") {
         setResetError("Please enter a valid email address");
       } else {
         setResetError("Something went wrong. Please try again.");
@@ -64,7 +67,7 @@ export default function AdminLogin() {
   }
 
   function backToLogin() {
-    setView('login');
+    setView("login");
     setResetSent(false);
     setResetError("");
     setResetEmail("");
@@ -86,7 +89,7 @@ export default function AdminLogin() {
         </div>
 
         <AnimatePresence mode="wait">
-          {view === 'login' ? (
+          {view === "login" ? (
             <motion.form
               key="login"
               initial={{ opacity: 0 }}
@@ -96,7 +99,10 @@ export default function AdminLogin() {
               className="mt-8 space-y-5"
             >
               <div>
-                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Email
                 </label>
                 <input
@@ -105,7 +111,7 @@ export default function AdminLogin() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  style={{ fontSize: '16px' }}
+                  style={{ fontSize: "16px" }}
                   className={inputClass}
                   placeholder="admin@yourstore.com"
                 />
@@ -113,12 +119,15 @@ export default function AdminLogin() {
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Password
                   </label>
                   <button
                     type="button"
-                    onClick={() => setView('forgot')}
+                    onClick={() => setView("forgot")}
                     className="text-xs font-medium text-[var(--primary-dark)] hover:underline"
                   >
                     Forgot password?
@@ -131,7 +140,7 @@ export default function AdminLogin() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{ fontSize: '16px' }}
+                    style={{ fontSize: "16px" }}
                     className={`${inputClass} pr-12`}
                     placeholder="••••••••"
                   />
@@ -139,9 +148,15 @@ export default function AdminLogin() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
                 {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
@@ -182,10 +197,13 @@ export default function AdminLogin() {
 
               {resetSent ? (
                 <div className="rounded-xl bg-green-50 p-4 text-center dark:bg-green-900/20">
-                  <p className="font-medium text-green-700 dark:text-green-400">Check your email</p>
+                  <p className="font-medium text-green-700 dark:text-green-400">
+                    Check your email
+                  </p>
                   <p className="mt-1 text-sm text-green-600 dark:text-green-500">
-                    We've sent a password reset link to <span className="font-medium">{resetEmail}</span>.
-                    Click the link in that email to set a new password.
+                    We've sent a password reset link to{" "}
+                    <span className="font-medium">{resetEmail}</span>. Click the
+                    link in that email to set a new password.
                   </p>
                   <button
                     type="button"
@@ -202,11 +220,15 @@ export default function AdminLogin() {
                       Reset your password
                     </h3>
                     <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                      Enter your admin email and we'll send you a link to reset your password.
+                      Enter your admin email and we'll send you a link to reset
+                      your password.
                     </p>
                   </div>
                   <div>
-                    <label htmlFor="resetEmail" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label
+                      htmlFor="resetEmail"
+                      className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                       Email
                     </label>
                     <input
@@ -215,11 +237,13 @@ export default function AdminLogin() {
                       required
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
-                      style={{ fontSize: '16px' }}
+                      style={{ fontSize: "16px" }}
                       className={inputClass}
                       placeholder="admin@yourstore.com"
                     />
-                    {resetError && <p className="mt-2 text-sm text-red-500">{resetError}</p>}
+                    {resetError && (
+                      <p className="mt-2 text-sm text-red-500">{resetError}</p>
+                    )}
                   </div>
                   <motion.button
                     type="submit"
