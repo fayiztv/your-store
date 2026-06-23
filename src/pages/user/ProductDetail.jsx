@@ -14,12 +14,14 @@ import { openWhatsApp } from "../../utils/whatsapp";
 import { ProductDetailSkeleton } from "../../components/common/ProductDetailSkeleton";
 import { containerVariantsProductDetails } from "../../utils/constents";
 import { useFavourites } from "../../hooks/useFavorites";
+import { useCheckout } from "../../hooks/useCheckout";
 
 export default function ProductDetail() {
   const { id: productId } = useParams();
   const navigate = useNavigate();
   const { isFavourite, addFavourite, removeFavourite } = useFavourites();
   const { settings } = useStoreSettings();
+  const { startOrder } = useCheckout();
 
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -174,11 +176,15 @@ export default function ProductDetail() {
     return product?.inStock === false;
   }
 
+  // ── Order on WhatsApp ──
+  // If the admin has enabled the address form, route through /checkout first.
+  // Otherwise, behaves exactly as before — straight to WhatsApp.
   function handleWhatsApp() {
     if (!product) return;
     const whatsappNumber = settings?.whatsappNumber || "";
     const storeName = settings?.storeName || "your store";
     if (!whatsappNumber) { toast.error("WhatsApp number is not configured"); return; }
+
     if (hasVariants) {
       if (variantType === 'label' && !selectedLabel) { toast.error("Please select an option first"); return; }
       if (variantType === 'size' && !selectedSize) { toast.error("Please select a size first"); return; }
@@ -190,6 +196,13 @@ export default function ProductDetail() {
       if (!selectedVariant) { toast.error("Please complete your selection"); return; }
       if (selectedVariant.inStock === false) { toast.error("This variant is out of stock"); return; }
     }
+
+    if (settings?.addressFormEnabled && (settings?.addressFormFields?.length || 0) > 0) {
+      startOrder(product, selectedVariant);
+      navigate("/checkout");
+      return;
+    }
+
     openWhatsApp(product, selectedVariant, whatsappNumber, storeName);
   }
 

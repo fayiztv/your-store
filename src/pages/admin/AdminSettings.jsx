@@ -2,12 +2,15 @@ import { useRef } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import useStoreSettingsData from "../../hooks/useStoreSettingsData";
 import useBannerData from "../../hooks/useBannerData";
+import useAddressFormData from "../../hooks/useAddressformdata ";
 import BrandingSection from "../../components/admin/settings/BrandingSection";
 import BannerSection from "../../components/admin/settings/BannerSection";
 import SecuritySection from "../../components/admin/settings/SecuritySection";
+import AddressFormSection from "../../components/admin/settings/AddressFormSection";
 import useSettingsActions from "../../hooks/useSettingsActions";
 import useBannerActions from "../../hooks/useBannerActions";
 import useSecurityActions from "../../hooks/useSecurityActions";
+import useAddressFormActions from "../../hooks/useAddressFormActions";
 import { SectionHeading } from "../../components/common/sectionHeading";
 
 export default function AdminSettings() {
@@ -18,10 +21,11 @@ export default function AdminSettings() {
 
   const storeSettings = useStoreSettingsData();
   const bannerData = useBannerData();
+  const addressFormData = useAddressFormData();
 
   const settingsActions = useSettingsActions(storeSettings);
-
   const bannerActions = useBannerActions(bannerData);
+  const addressFormActions = useAddressFormActions(addressFormData);
 
   const securityActions = useSecurityActions(
     currentUser,
@@ -52,6 +56,11 @@ export default function AdminSettings() {
         {...bannerData}
         {...bannerActions}
         bannerFileRef={bannerFileRef}
+      />
+
+      <AddressFormSection
+        {...addressFormData}
+        {...addressFormActions}
       />
 
       <SecuritySection {...securityActions} currentUser={currentUser} />

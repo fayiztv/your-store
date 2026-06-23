@@ -4,6 +4,7 @@ import { AuthProvider } from "../contexts/AuthContext";
 import { FavouritesProvider } from "../contexts/FavouritesContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import { SettingsProvider } from "../contexts/SettingsContext";
+import { CheckoutProvider } from "../contexts/Checkoutcontext ";
 import AppRoutes from "./routes";
 
 export default function App() {
@@ -13,8 +14,10 @@ export default function App() {
         <SettingsProvider>
           <AuthProvider>
             <FavouritesProvider>
-              <Toaster position="top-right" />
-              <AppRoutes />
+              <CheckoutProvider>
+                <Toaster position="top-right" />
+                <AppRoutes />
+              </CheckoutProvider>
             </FavouritesProvider>
           </AuthProvider>
         </SettingsProvider>

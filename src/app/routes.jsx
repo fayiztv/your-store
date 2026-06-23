@@ -5,6 +5,7 @@ import Home from "../pages/user/Home";
 import Products from "../pages/user/Products";
 import ProductDetail from "../pages/user/ProductDetail";
 import Favourites from "../pages/user/Favourites";
+import Checkout from "../pages/user/Checkout";
 import AdminLogin from "../pages/admin/AdminLogin";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import AdminDashboard from "../pages/admin/AdminDashboard";
@@ -26,6 +27,7 @@ export default function AppRoutes() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/favorites" element={<Favourites />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />

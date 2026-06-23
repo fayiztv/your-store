@@ -3,6 +3,7 @@ export function openWhatsApp(
   selectedVariant,
   whatsappNumber,
   storeName = "your store",
+  addressLines = [], // array of "*Label:* value" strings, built by Checkout.jsx
 ) {
   // Price
   const price = selectedVariant
@@ -24,6 +25,11 @@ export function openWhatsApp(
     }
   }
 
+  // Address section — only included if fields were filled in
+  const addressBlock = addressLines.length > 0
+    ? `\n\n📍 *Delivery Details*\n${addressLines.join("\n")}`
+    : "";
+
   // Product page link
   const productLink = `${window.location.origin}/product/${product.id}`;
 
@@ -34,7 +40,7 @@ Hello *${storeName}*,
 I'd like to order the following item:
 
 📦 *Product:* ${product.name}
-💰 *Price:* ₹${price}${variantLine}
+💰 *Price:* ₹${price}${variantLine}${addressBlock}
 
 🔗 *Product Link:*
 ${productLink}
