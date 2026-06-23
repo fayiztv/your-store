@@ -23,7 +23,7 @@ export default function useSecurityActions(
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const isDemoSite =
-  window.location.hostname === "your-store-demo.vercel.app";
+  window.location.hostname === "demo-store-in.vercel.app";
   
   // ── Change email handler ──
   async function handleChangeEmail(e) {
