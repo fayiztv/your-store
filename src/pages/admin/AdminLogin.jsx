@@ -12,7 +12,7 @@ export default function AdminLogin() {
   const { currentUser, login, resetPassword } = useAuth();
   const navigate = useNavigate();
 
-  const isDemoSite = window.location.hostname === "your-store-demo.vercel.app";
+  const isDemoSite = window.location.hostname === "demo-store-in.vercel.app";
 
   // Login form state
   const [email, setEmail] = useState(isDemoSite ? "tvfayiztv@gmail.com" : "");
