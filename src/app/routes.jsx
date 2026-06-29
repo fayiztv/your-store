@@ -15,6 +15,7 @@ import AdminCategories from "../pages/admin/AdminCategories";
 import AdminSettings from "../pages/admin/AdminSettings";
 import AdminLayout from "../layouts/AdminLayout";
 import NotFound from "../pages/common/NotFound";
+import PolicyPage from "../pages/user/PolicyPage";
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,10 @@ export default function AppRoutes() {
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/favorites" element={<Favourites />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/privacy-policy" element={<PolicyPage />} />
+          <Route path="/terms-and-conditions" element={<PolicyPage />} />
+          <Route path="/refund-policy" element={<PolicyPage />} />
+          {/* <Route path="/payment-policy" element={<PolicyPage />} /> */}
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />

@@ -12,6 +12,9 @@ import useBannerActions from "../../hooks/useBannerActions";
 import useSecurityActions from "../../hooks/useSecurityActions";
 import useAddressFormActions from "../../hooks/useAddressFormActions";
 import { SectionHeading } from "../../components/common/sectionHeading";
+import useLegalPoliciesData from "../../hooks/useLegalPoliciesData";
+import useLegalPoliciesActions from "../../hooks/useLegalPoliciesActions";
+import LegalPoliciesSection from "../../components/admin/settings/LegalPoliciesSection";
 
 export default function AdminSettings() {
   const bannerFileRef = useRef(null);
@@ -32,6 +35,10 @@ export default function AdminSettings() {
     changeEmail,
     changePassword,
   );
+
+  const legalPoliciesData = useLegalPoliciesData();
+
+  const legalPoliciesActions = useLegalPoliciesActions(legalPoliciesData);
 
   if (storeSettings.loading) {
     return (
@@ -58,12 +65,11 @@ export default function AdminSettings() {
         bannerFileRef={bannerFileRef}
       />
 
-      <AddressFormSection
-        {...addressFormData}
-        {...addressFormActions}
-      />
+      <AddressFormSection {...addressFormData} {...addressFormActions} />
 
       <SecuritySection {...securityActions} currentUser={currentUser} />
+
+      <LegalPoliciesSection {...legalPoliciesData} {...legalPoliciesActions} />
     </div>
   );
 }

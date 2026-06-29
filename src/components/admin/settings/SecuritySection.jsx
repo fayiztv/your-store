@@ -34,6 +34,7 @@ export default function SecuritySection({
       title="Security"
       icon={ShieldCheck}
       description="Change your admin login email or password."
+      defaultOpen={false}
     >
       <div className="space-y-5">
         {/* Change Email (subsection) */}

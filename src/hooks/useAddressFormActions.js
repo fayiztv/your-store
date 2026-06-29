@@ -9,7 +9,6 @@ function genFieldId() {
 
 export default function useAddressFormActions(addressFormData) {
   const {
-    addressFormEnabled,
     fields,
     setFields,
     setSaving,

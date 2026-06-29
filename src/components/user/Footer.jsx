@@ -46,7 +46,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="border-t pt-10 px-4 md:pb-10"
+      className="border-t pt-10 px-4"
       style={{
         backgroundColor: "var(--surface)",
         borderColor: "var(--border)",
@@ -54,11 +54,10 @@ export default function Footer() {
       }}
     >
       <div className="mx-auto max-w-5xl">
-        <div className="grid gap-8 md:grid-cols-3">
-
+        <div className="grid gap-8 md:grid-cols-4">
           {/* Column 1 — Brand */}
           <div>
-            <Logo light={false}/>
+            <Logo light={false} />
             {storeTagline && (
               <p className="mt-2 text-sm text-[var(--text-secondary)]">
                 {storeTagline}
@@ -114,28 +113,47 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Column 3 — Contact */}
+          {/* Column 3 — Privacy Policy */}
+
+          <div>
+            <h3 className="font-outfit font-semibold text-[var(--text-primary)]">
+              Legal & Policies
+            </h3>
+            <nav className="mt-3 flex flex-col gap-2">
+              {policyMap.map(({ to, label }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Column 4 — Contact */}
           <div>
             <h3 className="font-outfit font-semibold text-[var(--text-primary)]">
               Contact Us
             </h3>
             <div className="mt-3 flex flex-col gap-2">
-                <button
-                  type="button"
-                  onClick={openWhatsApp}
-                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)] text-left"
-                >
-                  <MessageCircle className="h-4 w-4 shrink-0" />
-                  Chat on WhatsApp
-                </button>
-                <button
-                  type="button"
-                  onClick={openInstagram}
-                  className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)] text-left"
-                >
-                  <span className="text-sm">@</span>
-                  Instagram
-                </button>
+              <button
+                type="button"
+                onClick={openWhatsApp}
+                className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)] text-left"
+              >
+                <MessageCircle className="h-4 w-4 shrink-0" />
+                Chat on WhatsApp
+              </button>
+              <button
+                type="button"
+                onClick={openInstagram}
+                className="flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)] text-left"
+              >
+                <span className="text-sm">@</span>
+                Instagram
+              </button>
             </div>
           </div>
         </div>

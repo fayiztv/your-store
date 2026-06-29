@@ -68,6 +68,7 @@ export default function useSettingsActions(storeSettings) {
           city: storeSettings.city.trim(),
           metaTitle: storeSettings.metaTitle.trim(),
           metaDescription: storeSettings.metaDescription.trim(),
+          developerCreditEnabled: storeSettings.developerCreditEnabled,
         },
         { merge: true },
       );

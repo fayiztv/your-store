@@ -31,6 +31,9 @@ export default function useStoreSettingsData() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Devoleper
+  const [developerCreditEnabled, setDeveloperCreditEnabled] = useState(true);
+
   // Load settings real-time
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -53,6 +56,7 @@ export default function useStoreSettingsData() {
           setCity(d.city || "");
           setMetaTitle(d.metaTitle || "");
           setMetaDescription(d.metaDescription || "");
+          setDeveloperCreditEnabled(d.developerCreditEnabled ?? true);
         }
         setLoading(false);
       },
@@ -100,5 +104,7 @@ export default function useStoreSettingsData() {
     setSaving,
     loading,
     setLoading,
+    developerCreditEnabled,
+    setDeveloperCreditEnabled,
   };
 }
