@@ -48,8 +48,9 @@ export default function BrandingSection({
   setLogoUrl,
   setLogoFile,
   setLogoPreview,
+  developerCreditEnabled,
+  setDeveloperCreditEnabled,
 }) {
-    
   async function handleSaveSettings(e) {
     e.preventDefault();
     setSaving(true);
@@ -82,6 +83,7 @@ export default function BrandingSection({
           city: city.trim(),
           metaTitle: metaTitle.trim(),
           metaDescription: metaDescription.trim(),
+          developerCreditEnabled: developerCreditEnabled,
         },
         { merge: true },
       );
@@ -385,6 +387,38 @@ export default function BrandingSection({
               {metaDescription.length}/160 characters
             </p>
           </div>
+        </Subsection>
+
+        <Subsection
+          title="Developer Credit"
+          description="Show or hide the developer credit in the footer."
+        >
+          <label className="flex cursor-pointer items-center gap-3">
+            <div
+              onClick={() => setDeveloperCreditEnabled((prev) => !prev)}
+              className={`relative h-6 w-11 rounded-full transition-colors ${
+                developerCreditEnabled
+                  ? "bg-[var(--primary-dark)]"
+                  : "bg-gray-300 dark:bg-gray-600"
+              }`}
+            >
+              <div
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  developerCreditEnabled ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
+            </div>
+
+            <div>
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Show developer credit
+              </p>
+
+              <p className="text-xs text-gray-400">
+                Displays "Powered by Fayiz T V" in the footer.
+              </p>
+            </div>
+          </label>
         </Subsection>
 
         <motion.button

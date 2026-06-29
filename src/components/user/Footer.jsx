@@ -5,7 +5,7 @@ import { Logo } from "../common/Logo";
 
 export default function Footer() {
   const { settings } = useStoreSettings();
-  const storeName = settings?.storeName || 'Your Store';
+  const storeName = settings?.storeName || "Your Store";
   const whatsappNumber = settings?.whatsappNumber || "";
   const instagramUrl = settings?.instagramUrl || "";
   const storeTagline = settings?.storeTagline || "";
@@ -13,6 +13,7 @@ export default function Footer() {
   const address = settings?.address || "";
   const openingHours = settings?.openingHours || "";
   const mapUrl = settings?.mapUrl || "";
+  const developerCreditEnabled = settings?.developerCreditEnabled ?? true;
 
   function openWhatsApp() {
     if (whatsappNumber) {
@@ -27,6 +28,21 @@ export default function Footer() {
       window.location.href = "https://www.instagram.com";
     }
   }
+
+  function openDeveloper() {
+    const message = encodeURIComponent(
+      "Hi Fayiz,\n\nI visited one of your client websites and I'd like a similar website for my business.",
+    );
+
+    window.location.href = `https://wa.me/917025576941?text=${message}`;
+  }
+
+  const policyMap = [
+    { to: "/privacy-policy", label: "Privacy Policy" },
+    { to: "/terms-and-conditions", label: "Terms & Conditions" },
+    { to: "/refund-policy", label: "Returns & Refund Policy" },
+    // { to: "/payment-policy", label: "Payment Policy" },
+  ];
 
   return (
     <footer
@@ -129,6 +145,15 @@ export default function Footer() {
           style={{ borderColor: "var(--border)" }}
         >
           © {new Date().getFullYear()} {storeName}. All rights reserved.
+          {developerCreditEnabled && (
+            <button
+              type="button"
+              onClick={openDeveloper}
+              className="mt-2 block w-full text-center text-xs text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
+            >
+              Powered by Fayiz T V • Get your own store → Click here.
+            </button>
+          )}
         </div>
       </div>
     </footer>
