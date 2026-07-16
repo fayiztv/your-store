@@ -12,12 +12,14 @@ const inputClass =
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { pendingOrder, clearOrder, savedAddressValues, saveAddressValues } = useCheckout();
+  const { pendingOrder, clearOrder, savedAddressValues, saveAddressValues } =
+    useCheckout();
   const { settings } = useStoreSettings();
 
   const fields = settings?.addressFormFields || [];
   const storeName = settings?.storeName || "your store";
   const whatsappNumber = settings?.whatsappNumber || "";
+  const whatsappTemplate = settings?.whatsappTemplate;
 
   // Pre-fill from any values saved earlier in this visit
   const [values, setValues] = useState(savedAddressValues || {});
@@ -33,7 +35,8 @@ export default function Checkout() {
   if (!pendingOrder) return null;
 
   const { product, selectedVariant } = pendingOrder;
-  const price = selectedVariant ? (selectedVariant.offerPrice ?? selectedVariant.price)
+  const price = selectedVariant
+    ? (selectedVariant.offerPrice ?? selectedVariant.price)
     : (product.offerPrice ?? product.price);
 
   function handleChange(fieldId, value) {
@@ -64,7 +67,14 @@ export default function Checkout() {
       .filter((f) => values[f.id]?.trim())
       .map((f) => `*${f.label}:* ${values[f.id].trim()}`);
 
-    openWhatsApp(product, selectedVariant, whatsappNumber, storeName, addressLines);
+    openWhatsApp(
+      product,
+      selectedVariant,
+      whatsappNumber,
+      storeName,
+      addressLines,
+      whatsappTemplate,
+    );
 
     clearOrder();
   }
@@ -94,19 +104,36 @@ export default function Checkout() {
         </p>
 
         {/* Order summary */}
-        <div className="mt-5 flex items-center gap-3 rounded-2xl p-4" style={{ backgroundColor: "var(--card-bg)" }}>
+        <div
+          className="mt-5 flex items-center gap-3 rounded-2xl p-4"
+          style={{ backgroundColor: "var(--card-bg)" }}
+        >
           {product.images?.[0] && (
-            <img src={product.images[0]} alt={product.name} className="h-14 w-14 rounded-xl object-cover" />
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="h-14 w-14 rounded-xl object-cover"
+            />
           )}
           <div className="min-w-0 flex-1">
-            <p className="truncate font-semibold text-[var(--text-primary)]">{product.name}</p>
+            <p className="truncate font-semibold text-[var(--text-primary)]">
+              {product.name}
+            </p>
             {selectedVariant && (
               <p className="text-xs text-[var(--text-secondary)]">
-                {[selectedVariant.label, selectedVariant.size, selectedVariant.color].filter(Boolean).join(" / ")}
+                {[
+                  selectedVariant.label,
+                  selectedVariant.size,
+                  selectedVariant.color,
+                ]
+                  .filter(Boolean)
+                  .join(" / ")}
               </p>
             )}
           </div>
-          <p className="font-outfit text-lg font-bold text-[var(--primary-dark)]">₹{price}</p>
+          <p className="font-outfit text-lg font-bold text-[var(--primary-dark)]">
+            ₹{price}
+          </p>
         </div>
 
         {/* Dynamic address form */}
@@ -114,7 +141,8 @@ export default function Checkout() {
           {fields.map((field) => (
             <div key={field.id}>
               <label className="mb-1.5 block text-sm font-medium text-[var(--text-primary)]">
-                {field.label} {field.required && <span className="text-red-500">*</span>}
+                {field.label}{" "}
+                {field.required && <span className="text-red-500">*</span>}
               </label>
 
               {field.type === "textarea" ? (
@@ -134,7 +162,9 @@ export default function Checkout() {
                 >
                   <option value="">Select...</option>
                   {(field.options || []).map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
                   ))}
                 </select>
               ) : (

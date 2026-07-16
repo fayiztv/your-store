@@ -1,33 +1,42 @@
-import { AlertCircle, Heart, Home, LayoutDashboard, Package, Settings, Star, Tag } from "lucide-react";
+import {
+  AlertCircle,
+  Heart,
+  Home,
+  LayoutDashboard,
+  Package,
+  Settings,
+  Star,
+  Tag,
+} from "lucide-react";
 
 export const statConfig = [
   {
-    key: 'products',
-    label: 'Total Products',
+    key: "products",
+    label: "Total Products",
     icon: Package,
-    bg: 'bg-blue-500/10',
-    text: 'text-blue-500',
+    bg: "bg-blue-500/10",
+    text: "text-blue-500",
   },
   {
-    key: 'categories',
-    label: 'Categories',
+    key: "categories",
+    label: "Categories",
     icon: Tag,
-    bg: 'bg-violet-500/10',
-    text: 'text-violet-500',
+    bg: "bg-violet-500/10",
+    text: "text-violet-500",
   },
   {
-    key: 'featured',
-    label: 'Featured',
+    key: "featured",
+    label: "Featured",
     icon: Star,
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-500',
+    bg: "bg-amber-500/10",
+    text: "text-amber-500",
   },
   {
-    key: 'outOfStock',
-    label: 'Out of Stock',
+    key: "outOfStock",
+    label: "Out of Stock",
     icon: AlertCircle,
-    bg: 'bg-red-500/10',
-    text: 'text-red-500',
+    bg: "bg-red-500/10",
+    text: "text-red-500",
   },
 ];
 
@@ -59,7 +68,7 @@ export const containerVariantsProductDetails = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
-export const containerVariantsFavorites= {
+export const containerVariantsFavorites = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.08 } },
 };
@@ -76,12 +85,12 @@ export const cardVariantsAdminCategory = {
 };
 
 export const categoryColors = [
-  'bg-blue-500/10 text-blue-500',
-  'bg-violet-500/10 text-violet-500',
-  'bg-amber-500/10 text-amber-500',
-  'bg-emerald-500/10 text-emerald-500',
-  'bg-rose-500/10 text-rose-500',
-  'bg-cyan-500/10 text-cyan-500',
+  "bg-blue-500/10 text-blue-500",
+  "bg-violet-500/10 text-violet-500",
+  "bg-amber-500/10 text-amber-500",
+  "bg-emerald-500/10 text-emerald-500",
+  "bg-rose-500/10 text-rose-500",
+  "bg-cyan-500/10 text-cyan-500",
 ];
 
 export const containerVariantsHome = {
@@ -94,19 +103,36 @@ export const cardVariantsHome = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-export const THEME_KEY = 'store_theme';
+export const THEME_KEY = "store_theme";
 
 export const PER_PAGE = 6;
 
 // CSS variable references
 export const CSS_VARS = {
-  primary: 'var(--primary)',
-  primaryDark: 'var(--primary-dark)',
-  textPrimary: 'var(--text-primary)',
-  textSecondary: 'var(--text-secondary)',
-  surface: 'var(--surface)',
-  border: 'var(--border)',
-  bg: 'var(--bg)',
-  cardBg: 'var(--card-bg)',
-  navbarBg: 'var(--navbar-bg)',
+  primary: "var(--primary)",
+  primaryDark: "var(--primary-dark)",
+  textPrimary: "var(--text-primary)",
+  textSecondary: "var(--text-secondary)",
+  surface: "var(--surface)",
+  border: "var(--border)",
+  bg: "var(--bg)",
+  cardBg: "var(--card-bg)",
+  navbarBg: "var(--navbar-bg)",
 };
+
+export const DEFAULT_TEMPLATE = `🛍️ *New Product Enquiry*
+
+Hello *{storeName}*,
+
+I'd like to order the following item:
+
+📦 *Product:* {productName}
+💰 *Price:* {price}
+{variant}
+{deliveryDetails}
+
+🔗 *Product Link:*
+{productLink}
+
+Please let me know if this product is available.
+Thank you 😊`;

@@ -1,53 +1,60 @@
+import { DEFAULT_TEMPLATE } from "./constents";
+
 export function openWhatsApp(
   product,
   selectedVariant,
   whatsappNumber,
-  storeName = "your store",
-  addressLines = [], // array of "*Label:* value" strings, built by Checkout.jsx
+  storeName = "Your Store",
+  addressLines = [],
+  whatsappTemplate = DEFAULT_TEMPLATE,
 ) {
-  // Price
   const price = selectedVariant
     ? (selectedVariant.offerPrice ?? selectedVariant.price)
     : (product.offerPrice ?? product.price);
 
-  // Variant details
   let variantLine = "";
 
   if (selectedVariant) {
     const parts = [
       selectedVariant.label,
-      selectedVariant.size ? `Size: ${selectedVariant.size}` : null,
-      selectedVariant.color ? `Color: ${selectedVariant.color}` : null,
+      selectedVariant.size
+        ? `Size: ${selectedVariant.size}`
+        : null,
+      selectedVariant.color
+        ? `Color: ${selectedVariant.color}`
+        : null,
     ].filter(Boolean);
 
-    if (parts.length > 0) {
-      variantLine = `\n*Variant:* ${parts.join(" / ")}`;
+    if (parts.length) {
+      variantLine = `📦 *Variant:* ${parts.join(" / ")}`;
     }
   }
 
-  // Address section — only included if fields were filled in
-  const addressBlock = addressLines.length > 0
-    ? `\n\n📍 *Delivery Details*\n${addressLines.join("\n")}`
-    : "";
+  let deliveryDetails = "";
 
-  // Product page link
-  const productLink = `${window.location.origin}/product/${product.id}`;
+  if (addressLines.length > 0) {
+    deliveryDetails =
+      `📍 *Delivery Details*\n` +
+      addressLines.join("\n");
+  }
 
-  const message = `🛍️ *New Product Enquiry*
+  const productLink =
+    `${window.location.origin}/product/${product.id}`;
 
-Hello *${storeName}*,
+  const variables = {
+    storeName,
+    productName: product.name,
+    price: `₹${price}`,
+    variant: variantLine,
+    deliveryDetails,
+    productLink,
+  };
 
-I'd like to order the following item:
+  const message = (whatsappTemplate || DEFAULT_TEMPLATE)
+    .replace(/\{(\w+)\}/g, (_, key) => variables[key] ?? "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 
-📦 *Product:* ${product.name}
-💰 *Price:* ₹${price}${variantLine}${addressBlock}
-
-🔗 *Product Link:*
-${productLink}
-
-Please let me know if this product is available.
-Thank you 😊`;
-
-  const encodedMessage = encodeURIComponent(message);
-  window.location.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+  window.location.href =
+    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 }

@@ -15,6 +15,9 @@ import { SectionHeading } from "../../components/common/sectionHeading";
 import useLegalPoliciesData from "../../hooks/useLegalPoliciesData";
 import useLegalPoliciesActions from "../../hooks/useLegalPoliciesActions";
 import LegalPoliciesSection from "../../components/admin/settings/LegalPoliciesSection";
+import useWhatsappTemplateData from "../../hooks/useWhatsappTemplateData";
+import useWhatsappTemplateActions from "../../hooks/useWhatsappTemplateActions";
+import WhatsAppTemplateSection from "../../components/admin/settings/WhatsAppTemplateSection";
 
 export default function AdminSettings() {
   const bannerFileRef = useRef(null);
@@ -25,10 +28,13 @@ export default function AdminSettings() {
   const storeSettings = useStoreSettingsData();
   const bannerData = useBannerData();
   const addressFormData = useAddressFormData();
+  const whatsappTemplateData = useWhatsappTemplateData();
 
   const settingsActions = useSettingsActions(storeSettings);
   const bannerActions = useBannerActions(bannerData);
   const addressFormActions = useAddressFormActions(addressFormData);
+  const whatsappTemplateActions =
+    useWhatsappTemplateActions(whatsappTemplateData);
 
   const securityActions = useSecurityActions(
     currentUser,
@@ -66,6 +72,11 @@ export default function AdminSettings() {
       />
 
       <AddressFormSection {...addressFormData} {...addressFormActions} />
+
+      <WhatsAppTemplateSection
+        {...whatsappTemplateData}
+        {...whatsappTemplateActions}
+      />
 
       <SecuritySection {...securityActions} currentUser={currentUser} />
 
