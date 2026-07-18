@@ -55,6 +55,12 @@ export default function AdminProductForm() {
   const [saving, setSaving] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  const [useSharedValues, setUseSharedValues] = useState(false);
+
+  const [sharedPrice, setSharedPrice] = useState("");
+  const [sharedOfferPrice, setSharedOfferPrice] = useState("");
+  const [sharedInStock, setSharedInStock] = useState(true);
+
   useEffect(() => {
     if (!isEdit) return;
     async function fetchProduct() {
@@ -147,7 +153,15 @@ export default function AdminProductForm() {
   }
 
   function addVariant() {
-    if (!newVariantPrice || Number(newVariantPrice) <= 0) {
+    const price = useSharedValues ? sharedPrice : newVariantPrice;
+
+    const offerPrice = useSharedValues
+      ? sharedOfferPrice
+      : newVariantOfferPrice;
+
+    const inStock = useSharedValues ? sharedInStock : newVariantInStock;
+
+    if (!price || Number(price) <= 0) {
       toast.error("Variant price is required");
       return;
     }
@@ -185,9 +199,9 @@ export default function AdminProductForm() {
         variantType === "color" || variantType === "size_color"
           ? newVariantColorHex
           : null,
-      price: Number(newVariantPrice),
-      offerPrice: newVariantOfferPrice ? Number(newVariantOfferPrice) : null,
-      inStock: newVariantInStock,
+      price: Number(price),
+      offerPrice: offerPrice ? Number(offerPrice) : null,
+      inStock,
     };
 
     setVariants((prev) => [...prev, variant]);
@@ -195,9 +209,11 @@ export default function AdminProductForm() {
     setNewVariantSize("");
     setNewVariantColor("");
     setNewVariantColorHex("#000000");
-    setNewVariantPrice("");
-    setNewVariantOfferPrice("");
-    setNewVariantInStock(true);
+    if (!useSharedValues) {
+      setNewVariantPrice("");
+      setNewVariantOfferPrice("");
+      setNewVariantInStock(true);
+    }
   }
 
   function removeVariant(variantId) {
@@ -591,6 +607,70 @@ export default function AdminProductForm() {
             )}
 
             <div className="rounded-xl border border-dashed border-gray-300 p-4 space-y-3 dark:border-gray-700">
+              <div className="rounded-xl border border-gray-200 p-4 space-y-3 dark:border-gray-700">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useSharedValues}
+                    disabled={variants.length > 0}
+                    onChange={(e) => {
+                      if (!sharedPrice || Number(sharedPrice) <= 0) {
+                        toast.error("Please enter a shared price first.");
+                        return;
+                      }
+
+                      setUseSharedValues(e.target.checked);
+                    }}
+                    className="h-4 w-4 accent-[var(--primary-dark)]"
+                  />
+
+                  <span className="text-sm font-medium">
+                    Use same price & stock for all variants
+                  </span>
+                </label>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-xs text-gray-500">
+                      Shared Price (₹) *
+                    </label>
+
+                    <input
+                      type="number"
+                      placeholder="500"
+                      value={sharedPrice}
+                      onChange={(e) => setSharedPrice(e.target.value)}
+                      disabled={variants.length > 0}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-xs text-gray-500">
+                      Shared Offer Price
+                    </label>
+
+                    <input
+                      type="number"
+                      placeholder="Optional"
+                      value={sharedOfferPrice}
+                      onChange={(e) => setSharedOfferPrice(e.target.value)}
+                      disabled={variants.length > 0}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <label className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      checked={sharedInStock}
+                      disabled={variants.length > 0}
+                      onChange={(e) => setSharedInStock(e.target.checked)}
+                    />
+                    In Stock
+                  </label>
+                </div>
+              </div>
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
                 Add Variant
               </p>
@@ -634,48 +714,52 @@ export default function AdminProductForm() {
                 </div>
               )}
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-xs text-gray-500">
-                    Price (₹) *
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={newVariantPrice}
-                    onChange={(e) => setNewVariantPrice(e.target.value)}
-                    style={{ fontSize: "16px" }}
-                    className={inputClass}
-                    placeholder="500"
-                  />
+              {!useSharedValues && (
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-xs text-gray-500">
+                      Price (₹) *
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={newVariantPrice}
+                      onChange={(e) => setNewVariantPrice(e.target.value)}
+                      style={{ fontSize: "16px" }}
+                      className={inputClass}
+                      placeholder="500"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs text-gray-500">
+                      Offer Price (₹)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={newVariantOfferPrice}
+                      onChange={(e) => setNewVariantOfferPrice(e.target.value)}
+                      style={{ fontSize: "16px" }}
+                      className={inputClass}
+                      placeholder="Leave empty for no discount"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="mb-1 block text-xs text-gray-500">
-                    Offer Price (₹)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={newVariantOfferPrice}
-                    onChange={(e) => setNewVariantOfferPrice(e.target.value)}
-                    style={{ fontSize: "16px" }}
-                    className={inputClass}
-                    placeholder="Leave empty for no discount"
-                  />
-                </div>
-              </div>
+              )}
 
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={newVariantInStock}
-                  onChange={(e) => setNewVariantInStock(e.target.checked)}
-                  className="h-4 w-4 rounded accent-[var(--primary-dark)]"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  In Stock
-                </span>
-              </label>
+              {!useSharedValues && (
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={newVariantInStock}
+                    onChange={(e) => setNewVariantInStock(e.target.checked)}
+                    className="h-4 w-4 rounded accent-[var(--primary-dark)]"
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    In Stock
+                  </span>
+                </label>
+              )}
 
               <motion.button
                 type="button"
