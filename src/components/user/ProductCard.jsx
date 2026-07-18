@@ -3,8 +3,8 @@ import { Heart, Shirt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cardVariants } from "../../utils/constents";
 import { useFavourites } from "../../hooks/useFavorites";
+import { getProductCategories } from "../../utils/helpers";
 
-// Helper: get price range string from variants
 function getVariantPriceRange(variants) {
   if (!variants || variants.length === 0) return null;
   const prices = variants.map((v) => v.offerPrice ?? v.price).filter(Boolean);
@@ -14,29 +14,21 @@ function getVariantPriceRange(variants) {
   return min === max ? `₹${min}` : `₹${min} – ₹${max}`;
 }
 
-// Helper: check if any variant has an offer
-function hasAnyOffer(variants) {
-  return variants?.some((v) => v.offerPrice != null && v.offerPrice > 0);
-}
-
 export default function ProductCard({ product, layout = "vertical" }) {
   const navigate = useNavigate();
   const { isFavourite, addFavourite, removeFavourite } = useFavourites();
   const favourited = isFavourite(product.id);
 
   const hasVariants = product.variants && product.variants.length > 0;
-  const categoryLabel = product.categoryName || product.category || "General";
-
-  // Simple product pricing
   const hasOffer =
     !hasVariants && product.offerPrice != null && product.offerPrice > 0;
-
-  // Variant price range
   const priceRange = hasVariants
     ? getVariantPriceRange(product.variants)
     : null;
 
-  // Color swatches (for color/size_color variants)
+  // Get all categories (new or old format)
+  const productCategories = getProductCategories(product, []);
+
   const colorVariants = hasVariants
     ? product.variants
         .filter((v) => v.colorHex)
@@ -56,19 +48,18 @@ export default function ProductCard({ product, layout = "vertical" }) {
     else addFavourite(product);
   }
 
-  // ─── PRICE DISPLAY ───
   function PriceDisplay({ size = "normal" }) {
     const bigClass = size === "big" ? "text-lg" : "text-base";
     const smallClass = size === "big" ? "text-sm" : "text-xs";
-
-    if (hasVariants) {
+    if (hasVariants)
       return (
-        <span className={`font-outfit font-bold text-[var(--primary)] ${bigClass}`}>
+        <span
+          className={`font-outfit font-bold text-[var(--primary)] ${bigClass}`}
+        >
           {priceRange}
         </span>
       );
-    }
-    if (hasOffer) {
+    if (hasOffer)
       return (
         <div className="flex items-end gap-1.5">
           <span
@@ -76,18 +67,42 @@ export default function ProductCard({ product, layout = "vertical" }) {
           >
             ₹{product.price}
           </span>
-          <span className={`font-outfit font-bold text-[var(--primary)] ${bigClass}`}>
+          <span
+            className={`font-outfit font-bold text-[var(--primary)] ${bigClass}`}
+          >
             ₹{product.offerPrice}
           </span>
         </div>
       );
-    }
     return (
       <span
         className={`font-outfit font-bold text-[var(--text-primary)] ${bigClass}`}
       >
         ₹{product.price ?? "—"}
       </span>
+    );
+  }
+
+  // Category chips component — shows all categories
+  function CategoryChips({ maxShow = 2 }) {
+    const visible = productCategories.slice(0, maxShow);
+    const extra = productCategories.length - maxShow;
+    return (
+      <div className="mt-1 flex flex-wrap gap-1">
+        {visible.map((cat) => (
+          <span
+            key={cat.id || cat.name}
+            className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]"
+          >
+            {cat.name}
+          </span>
+        ))}
+        {extra > 0 && (
+          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-800">
+            +{extra}
+          </span>
+        )}
+      </div>
     );
   }
 
@@ -135,11 +150,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
             <h3 className="line-clamp-2 font-outfit text-sm font-semibold text-[var(--text-primary)]">
               {product.name}
             </h3>
-            <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
-              {categoryLabel}
-            </span>
-
-            {/* Color swatches */}
+            <CategoryChips maxShow={2} />
             {colorVariants.length > 0 && (
               <div className="mt-1 flex gap-1">
                 {colorVariants.slice(0, 5).map((v) => (
@@ -152,8 +163,6 @@ export default function ProductCard({ product, layout = "vertical" }) {
                 ))}
               </div>
             )}
-
-            {/* Size labels (non-color variants) */}
             {hasVariants && colorVariants.length === 0 && (
               <p className="mt-0.5 text-xs text-[var(--text-secondary)]">
                 {product.variants
@@ -163,7 +172,6 @@ export default function ProductCard({ product, layout = "vertical" }) {
               </p>
             )}
           </div>
-
           <div className="mt-2 flex items-center justify-between">
             <PriceDisplay />
             <motion.button
@@ -225,11 +233,7 @@ export default function ProductCard({ product, layout = "vertical" }) {
           <h3 className="line-clamp-1 font-outfit text-base font-semibold text-[var(--text-primary)]">
             {product.name}
           </h3>
-          <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary)]">
-            {categoryLabel}
-          </span>
-
-          {/* Color swatches */}
+          <CategoryChips maxShow={1} />
           <div className="mt-1 min-h-[22px]">
             {colorVariants.length > 0 ? (
               <div className="flex gap-1.5">
@@ -254,7 +258,6 @@ export default function ProductCard({ product, layout = "vertical" }) {
             )}
           </div>
         </div>
-
         <div className="mt-3 flex items-center justify-between">
           <PriceDisplay size="big" />
           <motion.button

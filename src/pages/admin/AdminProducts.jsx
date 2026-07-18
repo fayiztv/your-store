@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Package, Pencil, Plus, Search, Shirt, Star, Trash2,
+  Package,
+  Pencil,
+  Plus,
+  Search,
+  Shirt,
+  Star,
+  Trash2,
 } from "lucide-react";
 import { deleteDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
@@ -11,7 +17,7 @@ import useProducts from "../../hooks/useProducts";
 import { ProductListSkeleton } from "../../components/admin/ProductListSkeleton";
 import GlassCard from "../../components/common/GlassCard";
 import { PER_PAGE } from "../../utils/constents";
-import { getPageNumbers } from "../../utils/helpers";
+import { getPageNumbers, getProductCategories } from "../../utils/helpers";
 import { SectionHeading } from "../../components/common/sectionHeading";
 
 const listVariants = {
@@ -24,40 +30,40 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
 
-// Helper: get price display from product (handles both simple + variants)
 function getPriceDisplay(product) {
   const hasVariants = product.variants && product.variants.length > 0;
-
   if (hasVariants) {
-    const prices = product.variants.map((v) => v.offerPrice ?? v.price).filter(Boolean);
-    if (prices.length === 0) return { type: 'simple', price: '—' };
+    const prices = product.variants
+      .map((v) => v.offerPrice ?? v.price)
+      .filter(Boolean);
+    if (prices.length === 0) return { type: "simple", price: "—" };
     const min = Math.min(...prices);
     const max = Math.max(...prices);
-    const hasOffer = product.variants.some((v) => v.offerPrice != null && v.offerPrice > 0);
+    const hasOffer = product.variants.some(
+      (v) => v.offerPrice != null && v.offerPrice > 0,
+    );
     return {
-      type: 'range',
+      type: "range",
       range: min === max ? `₹${min}` : `₹${min} – ₹${max}`,
       hasOffer,
     };
   }
-
   const hasOffer = product.offerPrice != null && product.offerPrice > 0;
-  return { type: 'simple', price: product.price, offerPrice: product.offerPrice, hasOffer };
+  return {
+    type: "simple",
+    price: product.price,
+    offerPrice: product.offerPrice,
+    hasOffer,
+  };
 }
 
-// Helper: get variant summary string for display
 function getVariantSummary(product) {
   const hasVariants = product.variants && product.variants.length > 0;
   if (!hasVariants) return null;
-
   const first = product.variants[0];
-
-  // Color variants — show color swatches
-  if (first.colorHex) return { type: 'colors', variants: product.variants };
-
-  // Label or size variants — show as text
+  if (first.colorHex) return { type: "colors", variants: product.variants };
   const labels = product.variants.map((v) => v.label || v.size).filter(Boolean);
-  return { type: 'text', text: labels.join(', ') };
+  return { type: "text", text: labels.join(", ") };
 }
 
 export default function AdminProducts() {
@@ -70,9 +76,9 @@ export default function AdminProducts() {
   const [gridKey, setGridKey] = useState(0);
 
   useEffect(() => {
-      setCurrentPage(1);
-      setGridKey((k) => k + 1);
-    }, [search]);
+    setCurrentPage(1);
+    setGridKey((k) => k + 1);
+  }, [search]);
 
   const filteredProducts = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -81,10 +87,10 @@ export default function AdminProducts() {
   }, [products, search]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PER_PAGE));
-    const paginatedProducts = filteredProducts.slice(
-      (currentPage - 1) * PER_PAGE,
-      currentPage * PER_PAGE,
-    );
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * PER_PAGE,
+    currentPage * PER_PAGE,
+  );
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -110,8 +116,8 @@ export default function AdminProducts() {
     <div>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-4">
         <div className="mt-4">
-        <SectionHeading>Products</SectionHeading>
-      </div>
+          <SectionHeading>Products</SectionHeading>
+        </div>
         <motion.button
           type="button"
           whileHover={{ scale: 1.02 }}
@@ -149,7 +155,9 @@ export default function AdminProducts() {
             {search ? "No products match your search" : "No products yet"}
           </h3>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {search ? "Try a different search term" : "Add your first product to get started"}
+            {search
+              ? "Try a different search term"
+              : "Add your first product to get started"}
           </p>
           {!search && (
             <motion.button
@@ -165,14 +173,14 @@ export default function AdminProducts() {
         </motion.div>
       ) : (
         <motion.div
-        key={gridKey}
+          key={gridKey}
           variants={listVariants}
           initial="hidden"
           animate="visible"
           className="space-y-3"
         >
           {paginatedProducts.map((product) => {
-            const categoryLabel = product.categoryName || product.category || "General";
+            const productCategories = getProductCategories(product, []);
             const priceDisplay = getPriceDisplay(product);
             const variantSummary = getVariantSummary(product);
 
@@ -182,7 +190,7 @@ export default function AdminProducts() {
                 variants={itemVariants}
                 className="rounded-2xl border border-transparent bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900"
               >
-                {/* TOP ROW — image + info */}
+                {/* TOP ROW */}
                 <div className="flex items-start gap-3">
                   {product.images?.[0] ? (
                     <img
@@ -201,17 +209,27 @@ export default function AdminProducts() {
                       {product.name}
                     </p>
 
-                    {/* Category + variant summary */}
+                    {/* Category chips — all of them */}
                     <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                      <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary-dark)]">
-                        {categoryLabel}
-                      </span>
+                      {productCategories.map((cat) => (
+                        <span
+                          key={cat.id || cat.name}
+                          className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)] dark:bg-blue-900/30 dark:text-[var(--primary-dark)]"
+                        >
+                          {cat.name}
+                        </span>
+                      ))}
 
                       {/* Color swatches */}
-                      {variantSummary?.type === 'colors' && (
+                      {variantSummary?.type === "colors" && (
                         <div className="flex items-center gap-1">
                           {variantSummary.variants
-                            .filter((v, i, arr) => arr.findIndex((x) => x.colorHex === v.colorHex) === i)
+                            .filter(
+                              (v, i, arr) =>
+                                arr.findIndex(
+                                  (x) => x.colorHex === v.colorHex,
+                                ) === i,
+                            )
                             .slice(0, 6)
                             .map((v) => (
                               <div
@@ -224,18 +242,19 @@ export default function AdminProducts() {
                         </div>
                       )}
 
-                      {/* Text variant summary */}
-                      {variantSummary?.type === 'text' && (
+                      {variantSummary?.type === "text" && (
                         <span className="text-xs text-gray-400 dark:text-gray-500">
                           {variantSummary.text}
                         </span>
                       )}
                     </div>
 
-                    {/* Price display */}
+                    {/* Price */}
                     <div className="mt-1 flex items-center gap-2">
-                      {priceDisplay.type === 'range' ? (
-                        <span className={`text-sm font-semibold ${priceDisplay.hasOffer ? 'text-[var(--primary-dark)]' : 'text-gray-900 dark:text-white'}`}>
+                      {priceDisplay.type === "range" ? (
+                        <span
+                          className={`text-sm font-semibold ${priceDisplay.hasOffer ? "text-[var(--primary-dark)]" : "text-gray-900 dark:text-white"}`}
+                        >
                           {priceDisplay.range}
                         </span>
                       ) : priceDisplay.hasOffer ? (
@@ -249,21 +268,22 @@ export default function AdminProducts() {
                         </>
                       ) : (
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                          {priceDisplay.price != null ? `₹${priceDisplay.price}` : '—'}
+                          {priceDisplay.price != null
+                            ? `₹${priceDisplay.price}`
+                            : "—"}
                         </span>
                       )}
-
-                      {/* Variant count badge */}
                       {product.variants?.length > 0 && (
                         <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                          {product.variants.length} variant{product.variants.length > 1 ? 's' : ''}
+                          {product.variants.length} variant
+                          {product.variants.length > 1 ? "s" : ""}
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* BOTTOM ROW — badges + actions */}
+                {/* BOTTOM ROW */}
                 <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
                   <div className="flex flex-wrap items-center gap-2">
                     {product.isFeatured && (
@@ -282,7 +302,6 @@ export default function AdminProducts() {
                       </span>
                     )}
                   </div>
-
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
@@ -309,63 +328,57 @@ export default function AdminProducts() {
       )}
 
       {totalPages > 1 && (
-                    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
-                      <motion.button
-                        type="button"
-                        whileTap={{ scale: 0.95 }}
-                        disabled={currentPage === 1}
-                        onClick={() => goToPage(currentPage - 1)}
-                        className="rounded-xl border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40"
-                        style={{
-                          borderColor: "var(--border)",
-                          color: "var(--text-primary)",
-                          backgroundColor: "var(--card-bg)",
-                        }}
-                      >
-                        Previous
-                      </motion.button>
-      
-                      {getPageNumbers(currentPage, totalPages).map((page) => (
-                        <motion.button
-                          key={page}
-                          type="button"
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => goToPage(page)}
-                          className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
-                            page === currentPage
-                              ? "border-[var(--primary-dark)] bg-[var(--primary-dark)] text-white"
-                              : ""
-                          }`}
-                          style={
-                            page !== currentPage
-                              ? {
-                                  borderColor: "var(--border)",
-                                  color: "var(--text-primary)",
-                                  backgroundColor: "var(--card-bg)",
-                                }
-                              : undefined
-                          }
-                        >
-                          {page}
-                        </motion.button>
-                      ))}
-      
-                      <motion.button
-                        type="button"
-                        whileTap={{ scale: 0.95 }}
-                        disabled={currentPage === totalPages}
-                        onClick={() => goToPage(currentPage + 1)}
-                        className="rounded-xl border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40"
-                        style={{
-                          borderColor: "var(--border)",
-                          color: "var(--text-primary)",
-                          backgroundColor: "var(--card-bg)",
-                        }}
-                      >
-                        Next
-                      </motion.button>
-                    </div>
-                  )}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.95 }}
+            disabled={currentPage === 1}
+            onClick={() => goToPage(currentPage - 1)}
+            className="rounded-xl border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40"
+            style={{
+              borderColor: "var(--border)",
+              color: "var(--text-primary)",
+              backgroundColor: "var(--card-bg)",
+            }}
+          >
+            Previous
+          </motion.button>
+          {getPageNumbers(currentPage, totalPages).map((page) => (
+            <motion.button
+              key={page}
+              type="button"
+              whileTap={{ scale: 0.95 }}
+              onClick={() => goToPage(page)}
+              className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${page === currentPage ? "border-[var(--primary-dark)] bg-[var(--primary-dark)] text-white" : ""}`}
+              style={
+                page !== currentPage
+                  ? {
+                      borderColor: "var(--border)",
+                      color: "var(--text-primary)",
+                      backgroundColor: "var(--card-bg)",
+                    }
+                  : undefined
+              }
+            >
+              {page}
+            </motion.button>
+          ))}
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.95 }}
+            disabled={currentPage === totalPages}
+            onClick={() => goToPage(currentPage + 1)}
+            className="rounded-xl border px-4 py-2 text-sm font-medium transition-colors disabled:opacity-40"
+            style={{
+              borderColor: "var(--border)",
+              color: "var(--text-primary)",
+              backgroundColor: "var(--card-bg)",
+            }}
+          >
+            Next
+          </motion.button>
+        </div>
+      )}
 
       <AnimatePresence>
         {deleteTarget && (
@@ -381,39 +394,38 @@ export default function AdminProducts() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm "
+              className="w-full max-w-sm"
             >
               <GlassCard className="p-6">
-
-              <h3 className="font-outfit text-lg font-bold text-gray-900 dark:text-white">
-                Delete Product?
-              </h3>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Are you sure you want to delete{" "}
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  {deleteTarget.name}
-                </span>
-                ? This action cannot be undone.
-              </p>
-              <div className="mt-6 flex gap-3">
-                <button
-                  type="button"
-                  disabled={deleting}
-                  onClick={() => setDeleteTarget(null)}
-                  className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                <h3 className="font-outfit text-lg font-bold text-gray-900 dark:text-white">
+                  Delete Product?
+                </h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Are you sure you want to delete{" "}
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    {deleteTarget.name}
+                  </span>
+                  ? This action cannot be undone.
+                </p>
+                <div className="mt-6 flex gap-3">
+                  <button
+                    type="button"
+                    disabled={deleting}
+                    onClick={() => setDeleteTarget(null)}
+                    className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                   >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  disabled={deleting}
-                  onClick={handleDelete}
-                  className="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-600 disabled:opacity-70"
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    disabled={deleting}
+                    onClick={handleDelete}
+                    className="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-70"
                   >
-                  {deleting ? "Deleting..." : "Delete"}
-                </button>
-              </div>
-                  </GlassCard>
+                    {deleting ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </GlassCard>
             </motion.div>
           </motion.div>
         )}

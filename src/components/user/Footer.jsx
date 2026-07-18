@@ -13,7 +13,6 @@ export default function Footer() {
   const address = settings?.address || "";
   const openingHours = settings?.openingHours || "";
   const mapUrl = settings?.mapUrl || "";
-  const developerCreditEnabled = settings?.developerCreditEnabled ?? true;
 
   function openWhatsApp() {
     if (whatsappNumber) {
@@ -31,7 +30,7 @@ export default function Footer() {
 
   function openDeveloper() {
     const message = encodeURIComponent(
-      "Hi Fayiz,\n\nI visited one of your client websites and I'd like a similar website for my business.",
+      "Hi DivNode,\n\nI visited one of your client websites and I'd like a similar website for my business.",
     );
 
     window.location.href = `https://wa.me/917025576941?text=${message}`;
@@ -163,15 +162,13 @@ export default function Footer() {
           style={{ borderColor: "var(--border)" }}
         >
           © {new Date().getFullYear()} {storeName}. All rights reserved.
-          {developerCreditEnabled && (
-            <button
-              type="button"
-              onClick={openDeveloper}
-              className="mt-2 block w-full text-center text-xs text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
-            >
-              Powered by Fayiz T V • Get your own store → Click here.
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={openDeveloper}
+            className="mt-2 block w-full text-center text-xs text-[var(--text-secondary)] transition-colors hover:text-[var(--primary-dark)]"
+          >
+            Powered by DivNode • Launch your own store →
+          </button>
         </div>
       </div>
     </footer>

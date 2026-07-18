@@ -67,28 +67,46 @@ export default function AdminCategories() {
 
   async function handleDelete() {
     if (!deleteTarget) return;
+
     setDeleting(true);
 
     try {
-      const productsSnap = await getDocs(
-        query(
-          collection(db, "products"),
-          where("categoryId", "==", deleteTarget.id),
+      const [oldProductsSnap, newProductsSnap] = await Promise.all([
+        getDocs(
+          query(
+            collection(db, "products"),
+            where("categoryId", "==", deleteTarget.id),
+          ),
         ),
-      );
+        getDocs(
+          query(
+            collection(db, "products"),
+            where("categoryIds", "array-contains", deleteTarget.id),
+          ),
+        ),
+      ]);
 
-      if (productsSnap.size > 0) {
+      // Remove duplicates (during migration a product may contain both fields)
+      const usedProducts = new Map();
+
+      oldProductsSnap.docs.forEach((doc) => usedProducts.set(doc.id, doc));
+
+      newProductsSnap.docs.forEach((doc) => usedProducts.set(doc.id, doc));
+
+      if (usedProducts.size > 0) {
         toast.error(
-          `Cannot delete — ${productsSnap.size} products use this category`,
+          `Cannot delete — ${usedProducts.size} product${usedProducts.size > 1 ? "s" : ""} use this category`,
         );
         setDeleteTarget(null);
         return;
       }
 
       await deleteDoc(doc(db, "categories", deleteTarget.id));
+
       toast.success("Category deleted");
       setDeleteTarget(null);
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to delete category");
     } finally {
       setDeleting(false);
