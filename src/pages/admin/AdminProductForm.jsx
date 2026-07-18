@@ -60,6 +60,7 @@ export default function AdminProductForm() {
   const [sharedPrice, setSharedPrice] = useState("");
   const [sharedOfferPrice, setSharedOfferPrice] = useState("");
   const [sharedInStock, setSharedInStock] = useState(true);
+  const [sharedValuesLocked, setSharedValuesLocked] = useState(false);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -93,6 +94,7 @@ export default function AdminProductForm() {
         if (data.variants && data.variants.length > 0) {
           setPricingMode("variants");
           setVariants(data.variants);
+          setSharedValuesLocked(false);
           const first = data.variants[0];
           if (first.size && first.color) setVariantType("size_color");
           else if (first.color) setVariantType("color");
@@ -203,6 +205,10 @@ export default function AdminProductForm() {
       offerPrice: offerPrice ? Number(offerPrice) : null,
       inStock,
     };
+
+    if (useSharedValues && variants.length === 0) {
+      setSharedValuesLocked(true);
+    }
 
     setVariants((prev) => [...prev, variant]);
     setNewVariantLabel("");
@@ -612,7 +618,7 @@ export default function AdminProductForm() {
                   <input
                     type="checkbox"
                     checked={useSharedValues}
-                    disabled={variants.length > 0}
+                    disabled={sharedValuesLocked}
                     onChange={(e) => {
                       if (!sharedPrice || Number(sharedPrice) <= 0) {
                         toast.error("Please enter a shared price first.");
@@ -640,7 +646,7 @@ export default function AdminProductForm() {
                       placeholder="500"
                       value={sharedPrice}
                       onChange={(e) => setSharedPrice(e.target.value)}
-                      disabled={variants.length > 0}
+                      disabled={sharedValuesLocked}
                       className={inputClass}
                     />
                   </div>
@@ -655,7 +661,7 @@ export default function AdminProductForm() {
                       placeholder="Optional"
                       value={sharedOfferPrice}
                       onChange={(e) => setSharedOfferPrice(e.target.value)}
-                      disabled={variants.length > 0}
+                      disabled={sharedValuesLocked}
                       className={inputClass}
                     />
                   </div>
@@ -664,7 +670,7 @@ export default function AdminProductForm() {
                     <input
                       type="checkbox"
                       checked={sharedInStock}
-                      disabled={variants.length > 0}
+                      disabled={sharedValuesLocked}
                       onChange={(e) => setSharedInStock(e.target.checked)}
                     />
                     In Stock
