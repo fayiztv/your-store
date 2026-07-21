@@ -14,12 +14,14 @@ export default function Footer() {
   const openingHours = settings?.openingHours || "";
   const mapUrl = settings?.mapUrl || "";
 
+  const message = `Hello, *${storeName}!*
+I need assistance before purchasing.`;
+
   function openWhatsApp() {
     if (whatsappNumber) {
-      window.location.href = `https://wa.me/${whatsappNumber}`;
+      window.location.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     }
   }
-
   function openInstagram() {
     if (instagramUrl) {
       window.location.href = instagramUrl;

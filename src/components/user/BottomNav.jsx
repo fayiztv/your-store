@@ -25,13 +25,16 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const { favourites } = useFavourites();
   const { isDark, toggleTheme } = useTheme();
-   const { settings } = useStoreSettings();
-    const storeName = settings?.storeName || 'Your Store';
-    const whatsappNumber = settings?.whatsappNumber || "";
+  const { settings } = useStoreSettings();
+  const storeName = settings?.storeName || "Your Store";
+  const whatsappNumber = settings?.whatsappNumber || "";
+
+  const message = `Hello, *${storeName}!*
+I need assistance before purchasing.`;
 
   function openWhatsApp() {
     if (whatsappNumber) {
-      window.location.href = `https://wa.me/${whatsappNumber}?text=Hello, *${storeName}!*.`;
+      window.location.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     }
   }
 
@@ -64,7 +67,9 @@ export default function BottomNav() {
               }
             }}
             className="relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2"
-            style={{ color: isActive ? CSS_VARS.primary : CSS_VARS.textSecondary }}
+            style={{
+              color: isActive ? CSS_VARS.primary : CSS_VARS.textSecondary,
+            }}
           >
             {/* Active indicator dot */}
             {isActive && (
