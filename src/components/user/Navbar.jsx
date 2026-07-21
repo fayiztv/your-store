@@ -40,9 +40,12 @@ export default function Navbar() {
     else window.location.href = "https://www.instagram.com";
   }
 
+  const message = `Hello, *${storeName}!*
+I need assistance before purchasing.`;
+
   function openWhatsApp() {
     if (whatsappNumber) {
-      window.location.href = `https://wa.me/${whatsappNumber}?text=Hello, *${storeName}!*.`;
+      window.location.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     }
   }
 
